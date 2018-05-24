@@ -45,3 +45,19 @@ bool checkSecatel(Secatel sec)
 
 	return (b1 && b2 && b3 && b4);
 }
+
+void swap(int &a, int &b)
+{
+	int c = a;
+	a = b;
+	b = c;
+}
+
+void fixSecatel(Secatel sec)
+{
+	if (sec.Xmax < sec.Xmin)
+		swap(sec.Xmax, sec.Xmin);
+
+	if (sec.Ymax < sec.Ymin)
+		swap(sec.Ymax, sec.Ymin);
+}

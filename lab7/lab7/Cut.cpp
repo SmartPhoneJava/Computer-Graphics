@@ -36,9 +36,6 @@ double cutTan(Cut *cut)
 	int dx = getCutDX(cut);
 	int dy = getCutDY(cut);
 
-	//debug("dx", dx);
-	//debug("dy", dy);
-
 	if (dx == 0)
 		return VERTICAL;
 	else if (dy == 0)
@@ -46,7 +43,6 @@ double cutTan(Cut *cut)
 	else
 	{
 		double result = (double)dy / (double)dx;
-		//debugDouble("return_tg", result);
 		return result;
 	}
 }

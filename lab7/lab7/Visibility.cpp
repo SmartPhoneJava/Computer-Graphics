@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Visibility.h"
 
-// ¬идима ли точка. 0 если видима, >0 если невидима
+// ¬идима ли точка. 1 если видима, 0 если невидима
 int isPointVisible(Visibility vis)
 {
 	int result = ((vis.T1 + vis.T2 + vis.T3 + vis.T4) == 0);
@@ -19,14 +19,20 @@ bool isCutPartVisible(Visibility v1, Visibility v2)
 // —тепень видимости отрезка(полна€ видимость\невидимость, частична€)
 int checkCut(Visibility vis1, Visibility vis2)
 {
+
 	int first = isPointVisible(vis1);
 	int second = isPointVisible(vis2);
 
+	debugVisibility(vis1, "first", first);
+	debugVisibility(vis2, "second", second);
+
 	int result = PART_VISIBLE;
 
-	if ((first + second) == FULL_VISIBLE)
+	if (first && second)
+	{
 		result = FULL_VISIBLE;
-	else if ((first != FULL_VISIBLE) && (second != FULL_VISIBLE))
+	}
+	else if ((!first) && (!second))
 	{
 		if (!isCutPartVisible(vis1, vis2))
 			result = FULL_UNVISIBLE;

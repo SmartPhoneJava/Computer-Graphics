@@ -6,3 +6,7 @@
 #include <iostream>
 
 Cut* cutInside(Cut *cut, Secatel sec);
+
+bool nearAB(int a, int b);
+
+void setIfBool(int &a, int set, bool b);

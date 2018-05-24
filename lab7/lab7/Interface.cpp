@@ -40,6 +40,31 @@ void mouseClicked(LPARAM lParam, int borderX,
 	}
 }
 
+void secatelControl(LPARAM lParam, Secatel &secatel, int &catched, int borderX)
+{
+	int x, y;
+	if (LOWORD(lParam) < borderX)
+	{
+		x = LOWORD(lParam);
+		y = HIWORD(lParam);
+
+		if (!catched)
+		{
+			setIfBool(catched, 1, nearAB(x, secatel.Xmin));
+			setIfBool(catched, 2, nearAB(x, secatel.Xmax));
+			setIfBool(catched, 3, nearAB(y, secatel.Ymin));
+			setIfBool(catched, 4, nearAB(y, secatel.Ymax));
+		}
+		else
+		{
+			setIfBool(secatel.Xmin, x, (catched == 1));
+			setIfBool(secatel.Xmax, x, (catched == 2));
+			setIfBool(secatel.Ymin, y, (catched == 3));
+			setIfBool(secatel.Ymax, y, (catched == 4));
+		}
+	}
+}
+
 void addListViewItem(HWND ListView, int x1, int y1, int x2, int y2)
 {
 	LVITEM lis;
