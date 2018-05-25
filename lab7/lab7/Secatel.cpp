@@ -53,7 +53,7 @@ void swap(int &a, int &b)
 	b = c;
 }
 
-void fixSecatel(Secatel sec)
+void fixSecatel(Secatel &sec)
 {
 	if (sec.Xmax < sec.Xmin)
 		swap(sec.Xmax, sec.Xmin);

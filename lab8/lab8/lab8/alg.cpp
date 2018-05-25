@@ -193,24 +193,18 @@ void setIfFree(Secatel secatel, Point *from,
 	
 	if (!checkPoint(secatel, *from))
 	{
-		debugPoint(from, "bad 'from' in setIfFree", 184);
-		debugSecatel (secatel, "a;so", 0);
 		return;
 	}
-	debugPoint(from, "dd", 9);
-	debugPoint(to1, "to", 9);
 	
 	if (isPointFree(to1))
 	{
 		to1->x = from->x;
 		to1->y = from->y;
-		debugPoint(to1, "to1", 1);
 	}
 	else if (isPointFree(to2))
 	{
 		to2->x = from->x;
 		to2->y = from->y;
-		debugPoint(to2, "to2", 2);
 	}
 }
 
@@ -223,7 +217,6 @@ void setIfBool(int &a, int set, bool b)
 {
 	if (b)
 	{
-		debug("work", set);
 		a = set;
 	}
 	
@@ -233,7 +226,6 @@ void setIfBool(int &a, int set, bool b)
 Cut* cutInside(Cut *cut, Secatel sec)
 {
 	fixSecatel(sec);
-	debugSecatel(sec, "seccc", 0);
 
 	double tg = cutTan(cut);
 
@@ -244,12 +236,10 @@ Cut* cutInside(Cut *cut, Secatel sec)
 
 	if (status == FULL_VISIBLE)
 	{
-		debug("FULL_VISIBLE", 0);
 		return cut;
 	}
 	else if (status == FULL_UNVISIBLE)
 	{
-		debug("FULL_UNVISIBLE", 0);
 		return newCut(
 			newPoint(NO_POINT, NO_POINT),
 			newPoint(NO_POINT, NO_POINT)
@@ -261,25 +251,10 @@ Cut* cutInside(Cut *cut, Secatel sec)
 	Point *up = NULL;
 	Point *down = NULL;
 
-	//debugDouble("tg", tg);
-
-	//debugSecatel(sec, "sss", 0);
-
 	left = move(&borderLeft, &whoLeft, cut, sec, tg);
 	right = move(&borderRight, &whoRight, cut, sec, tg);
 	up = move(&borderUp, &whoUp, cut, sec, tg);
 	down = move(&borderDown, &whoDown, cut, sec, tg);
-
-	//debugSecatel(sec, "sss", 0);
-
-	if (left)
-		debugPoint(left, "left", 0);
-	if (right)
-		debugPoint(right, "right", 0);
-	if (up)
-		debugPoint(up, "up", 0);
-	if (down)
-		debugPoint(down, "down", 0);
 
 	Point *first = newPoint(NO_POINT, NO_POINT);
 	Point *second = newPoint(NO_POINT, NO_POINT);
@@ -298,7 +273,5 @@ Cut* cutInside(Cut *cut, Secatel sec)
 	}
 
 	Cut* cuttt = newCut(first, second);
-
-	debugCut(cuttt, "cutttt", 8);
 	return cuttt;
 }

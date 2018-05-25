@@ -20,4 +20,4 @@ bool checkSecatel(Secatel sec);
 
 void makeNullSecatel(Secatel &sec);
 
-void fixSecatel(Secatel sec);
+void fixSecatel(Secatel &sec);
