@@ -27,3 +27,6 @@ void debugCutVisibility(Cut *cut, const char* text, int number);
 
 bool compareCuts(Cut* A, Cut *B);
 
+int getCutDX(Cut *cut);
+
+int getCutDY(Cut *cut);

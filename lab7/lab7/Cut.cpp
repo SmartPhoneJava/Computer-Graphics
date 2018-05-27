@@ -2,44 +2,163 @@
 #include "Cut.h"
 #include <iostream>
 
-int getCutDX(Cut *cut)
+void Cut::setBegin(Point *point)noexcept
 {
-	return cut->end->x - cut->begin->x;
+	this->begin = point;
 }
 
-int getCutDY(Cut *cut)
+void Cut::setBegin(const Point *point)noexcept
 {
-	return cut->end->y - cut->begin->y;
+	this->begin = const_cast<Point*>(point);
 }
 
-Cut* newCut(Point *a, Point *b)
+void Cut::setBegin(const int &x, const int &y)noexcept
 {
-	Cut *cut = (Cut*)calloc(1, sizeof(Cut));
-	cut->begin = a;
-	cut->end = b;
-	return cut;
+	this->begin = newPoint(x, y);
 }
 
-Cut* newCutInt(int x1, int y1, int x2, int y2)
+void Cut::setBegin()noexcept
 {
-	return newCut(newPoint(x1, y1), newPoint(x2, y2));
+	this->begin = newPoint(NO_POINT, NO_POINT);
 }
 
-void deleteCut(Cut **cut)
+Point* Cut::getBegin()noexcept
 {
-	free(*cut);
-	*cut = NULL;
+	return this->begin;
 }
 
-double cutTan(Cut *cut)
+void Cut::setEnd(Point *point)noexcept
 {
-	int dx = getCutDX(cut);
-	int dy = getCutDY(cut);
+	this->end = point;
+}
+
+void Cut::setEnd(const Point *point)noexcept
+{
+	this->end = const_cast<Point*>(point);
+}
+
+void Cut::setEnd(const int &x,
+	const int &y)noexcept
+{
+	this->end = newPoint(x, y);
+}
+
+void Cut::setEnd()noexcept
+{
+	this->end = newPoint(NO_POINT, NO_POINT);
+}
+
+Point* Cut::getEnd()noexcept
+{
+	return this->end;
+}
+
+Cut::Cut() // конструктор класса
+{
+	setBegin();
+	setEnd();
+}
+
+Cut::Cut(const Point *p1, const Point *p2)
+{
+	setBegin(p1);
+	setEnd(p2);
+}
+
+Cut::Cut(int x1, int y1, int x2, int y2)
+{
+	setBegin(newPoint(x1, y1));
+	setEnd(newPoint(x2, y2));
+}
+
+Cut::Cut(Point *p1, Point *p2)
+{
+	setBegin(p1);
+	setEnd(p2);
+}
+
+void Cut::status() noexcept
+{
+	if (!begin)
+	{
+		debug("begin problem", 0);
+	}
+	if (!end)
+	{
+		debug("end problem", 0);
+	}
+}
+
+// конструктор копирования
+Cut::Cut(const Cut &cut)
+{
+	const_cast<Cut&>(cut).status();
+	begin = newPoint(cut.begin->x, cut.begin->y);
+	end = newPoint(cut.end->x, cut.end->y);
+}
+
+void Cut::destroy() noexcept
+{
+	if (begin)
+		delete begin;
+	if (end)
+		delete end;
+}
+
+Cut::Cut(Cut &&cut) noexcept
+{
+	begin = cut.begin;
+	end = cut.end;
+	cut.begin = nullptr;
+	cut.end = nullptr;
+}
+
+Cut& Cut::operator=(const Cut& other) noexcept
+{
+	destroy();
+	begin = other.begin;
+	end = other.end;
+	return *this;
+}
+
+Cut& Cut::operator=(Cut&& other)noexcept
+{
+	destroy();
+	begin = other.begin;
+	end = other.end;
+	other.begin = nullptr;
+	other.end = nullptr;
+	return *this;
+}
+
+Cut::~Cut() // деструктор класса
+{
+	destroy();
+}
+
+int Cut::width() const noexcept
+{
+	return end->x - begin->x;
+}
+
+int Cut::height() const noexcept
+{
+	return end->y - begin->y;
+}
+
+double Cut::tan() const noexcept
+{
+	int dx = width();
+	int dy = height();
 
 	if (dx == 0)
+	{
 		return VERTICAL;
+	}
 	else if (dy == 0)
+	{
 		return HORIZONTAL;
+	}
 	else
 	{
 		double result = (double)dy / (double)dx;
@@ -47,21 +166,23 @@ double cutTan(Cut *cut)
 	}
 }
 
-void debugCut(Cut *cut, const char* text, int number)
+void Cut::debugCut(
+	const char* text, int number) noexcept
 {
 	debug(text, number);
-	debug("x1_cut", cut->begin->x);
-	debug("y1_cut", cut->begin->y);
-	debug("x2_cut", cut->end->x);
-	debug("y2_cut", cut->end->y);
+	debug("x1_cut", begin->x);
+	debug("y1_cut", begin->y);
+	debug("x2_cut", end->x);
+	debug("y2_cut", end->y);
 }
 
-void debugCutVisibility(Cut *cut, const char* text, int number)
+void Cut::debugCutVisibility(
+	const char* text, int number) noexcept
 {
 	debug(text, number);
 
-	Visibility v1 = cut->begin->vis;
-	Visibility v2 = cut->end->vis;
+	Visibility v1 = begin->vis;
+	Visibility v2 = end->vis;
 
 	debugVisibility(v1, "Visibility of first point",
 		isPointVisible(v1));
@@ -69,9 +190,11 @@ void debugCutVisibility(Cut *cut, const char* text, int number)
 		isPointVisible(v2));
 }
 
-bool compareCuts(Cut* A, Cut *B)
+bool Cut::compareWithCut(
+	const Cut &B) noexcept
 {
-	bool begin = comparePoints(A->begin, B->begin);
-	bool end = comparePoints(A->end, B->end);
+	bool begin = comparePoints(this->begin, B.begin);
+	bool end = comparePoints(this->end, B.end);
 	return (begin && end);
 }
+

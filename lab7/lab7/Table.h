@@ -16,7 +16,7 @@ Table* searchTable(Table* table, Cut *cut);
 
 Table* addToTable(Table* table, Cut *cut);
 
-bool isCutInTable(Table *A, Cut *cut);
+bool isCutInTable(Table *A, const Cut &cut);
 
 Table* deleteOfTable(Table* table, Cut *cut);
 

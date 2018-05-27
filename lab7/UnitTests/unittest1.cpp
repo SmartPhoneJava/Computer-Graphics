@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "../lab7/Cut.h"
+#include "../lab7/Alg.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -14,6 +14,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 		{
 			int a = 3;
 			int b = 3;
+
 			Assert::AreEqual(a, b, L"message", LINE_INFO());
 		}
 		TEST_METHOD(newT)
@@ -25,6 +26,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 			//Assert::AreEqual(cut->end->x, c, L"message", LINE_INFO());
 			//Assert::AreEqual(cut->end->y, d, L"message", LINE_INFO());
 		}
+		/*
 		TEST_METHOD(cutTan_t_HORIZONTAL)
 		{
 			int a = 3;
@@ -37,6 +39,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 			int b = 3;
 			Assert::AreEqual(a, b, L"message", LINE_INFO());
 		}
+		*/
 
 	};
 
@@ -49,4 +52,11 @@ void debugCut(Cut *cut, const char* text, int number);
 
 void debugCutVisibility(Cut *cut, const char* text, int number);
 
-bool compareCuts(Cut* A, Cut *B);*/
+bool compareCuts(Cut* A, Cut *B);
+
+Cut* cutInside(Cut *cut, Secatel sec);
+
+bool nearAB(int a, int b);
+
+void setIfBool(int &a, int set, bool b);
+*/

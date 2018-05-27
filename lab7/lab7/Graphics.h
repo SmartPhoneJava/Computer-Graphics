@@ -15,7 +15,7 @@
 void drawLine(HDC hdc, int X1, int Y1,
 	int X2, int Y2, DWORD color);
 
-void drawCut(HDC hdc, Cut *cut, DWORD color);
+void drawCut(HDC hdc, Cut cut, DWORD color);
 
 void drawCutInside(HDC hdc, Cut *cut,
 	Secatel sec, DWORD color);

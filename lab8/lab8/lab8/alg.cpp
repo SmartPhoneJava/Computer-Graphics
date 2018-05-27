@@ -223,55 +223,33 @@ void setIfBool(int &a, int set, bool b)
 }
 
 // Получение отрезка
-Cut* cutInside(Cut *cut, Secatel sec)
+Cut* cutInside(Cut *cut, Secatel *secatel)
 {
-	fixSecatel(sec);
+	int dx = getCutDX(cut);
+	int dy = getCutDY(cut);
 
-	double tg = cutTan(cut);
+	Point *d, *w;
 
-	setPointVisibility(*(cut->begin), sec);
-	setPointVisibility(*(cut->end), sec);
+	d = newPoint(dx, dy);
 
-	int status = checkCut(cut->begin->vis, cut->end->vis);
+	Secatel *move = secatel;
 
-	if (status == FULL_VISIBLE)
+	Cut *rebro = newCutInt(NO_POINT, NO_POINT, NO_POINT, NO_POINT);
+
+	Cut *vektor;
+
+	while (move->next != NULL)
 	{
-		return cut;
-	}
-	else if (status == FULL_UNVISIBLE)
-	{
-		return newCut(
-			newPoint(NO_POINT, NO_POINT),
-			newPoint(NO_POINT, NO_POINT)
-		);
-	}
+		//deleteCut(&cut);
+		rebro = newCut(move->p, move->next->p);
+		vektor = newCut(rebro->begin, cut->begin);
 
-	Point *left = NULL;
-	Point *right = NULL;
-	Point *up = NULL;
-	Point *down = NULL;
+		dx = getCutDX(vektor);
 
-	left = move(&borderLeft, &whoLeft, cut, sec, tg);
-	right = move(&borderRight, &whoRight, cut, sec, tg);
-	up = move(&borderUp, &whoUp, cut, sec, tg);
-	down = move(&borderDown, &whoDown, cut, sec, tg);
+		w = newPoint(dx, dy);
 
-	Point *first = newPoint(NO_POINT, NO_POINT);
-	Point *second = newPoint(NO_POINT, NO_POINT);
-
-	setIfFree(sec, left, first, second);
-	setIfFree(sec, right, first, second);
-	setIfFree(sec, up, first, second);
-	setIfFree(sec, down, first, second);
-
-	if (isPointFree(second))
-	{
-		if (isPointVisible(cut->begin->vis))
-			second = cut->begin;
-		else
-			second = cut->end;
 	}
 
-	Cut* cuttt = newCut(first, second);
-	return cuttt;
+	Point *d = newPoint(dx, dy);
 }
+

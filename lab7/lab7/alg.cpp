@@ -6,7 +6,7 @@ int count(double tangens, int coord_secator,
 	int coord1_point, int coord2_point)
 {
 	int min = coord_secator - coord1_point;
-	return tangens * min + coord2_point;
+	return (int)(tangens * min + coord2_point);
 }
 
 /*
@@ -19,43 +19,42 @@ T4 - ниже(y ниже)
 Вернёт точку. Если ни одна не подойдет, то NULL
 */
 
-// Какой из концов отрезка левее секатора
-Point* whoLeft(Cut *cut)
+Point* whoLeft(Cut &cut)
 {
-	if (cut->begin->vis.T1 == 1)
-		return cut->begin;
-	if (cut->end->vis.T1 == 1)
-		return cut->end;
+	if (cut.getBegin()->vis.T1 == 1)
+		return cut.getBegin();
+	if (cut.getEnd()->vis.T1 == 1)
+		return cut.getEnd();
 	return NULL;
 }
 
 // Какой из концов отрезка правее секатора
-Point* whoRight(Cut *cut)
+Point* whoRight(Cut &cut)
 {
-	if (cut->begin->vis.T2 == 1)
-		return cut->begin;
-	if (cut->end->vis.T2 == 1)
-		return cut->end;
+	if (cut.getBegin()->vis.T2 == 1)
+		return cut.getBegin();
+	if (cut.getEnd()->vis.T2 == 1)
+		return cut.getEnd();
 	return NULL;
 }
 
 // Какой из концов отрезка выше секатора
-Point* whoUp(Cut *cut)
+Point* whoUp(Cut &cut)
 {
-	if (cut->begin->vis.T3 == 1)
-		return cut->begin;
-	if (cut->end->vis.T3 == 1)
-		return cut->end;
+	if (cut.getBegin()->vis.T3 == 1)
+		return cut.getBegin();
+	if (cut.getEnd()->vis.T3 == 1)
+		return cut.getEnd();
 	return NULL;
 }
 
 // Какой из концов отрезка ниже секатора
-Point* whoDown(Cut *cut)
+Point* whoDown(Cut &cut)
 {
-	if (cut->begin->vis.T4 == 1)
-		return cut->begin;
-	if (cut->end->vis.T4 == 1)
-		return cut->end;
+	if (cut.getBegin()->vis.T4 == 1)
+		return cut.getBegin();
+	if (cut.getEnd()->vis.T4 == 1)
+		return cut.getEnd();
 	return NULL;
 }
 
@@ -162,7 +161,7 @@ Point* borderDown(Point *p, Secatel sec, double m)
 
 // Указатель на функцию поиска определения какая
 // из точек отрезка с какой стороны находится
-typedef Point*(*Who)(Cut *cut);
+typedef Point*(*Who)(Cut &cut);
 
 // Указатель на функцию поиска точки пересечения
 typedef Point*(*Border)(Point *p,
@@ -170,7 +169,7 @@ typedef Point*(*Border)(Point *p,
 
 // Двигаемся к одному(задаётся параметрами функции)
 // из ребер секатора 
-Point* move(Border border, Who who, Cut *cut,
+Point* move(Border border, Who who, Cut &cut,
 	Secatel sec, double tg)
 {
 	if (!who(cut))
@@ -227,12 +226,12 @@ Cut* cutInside(Cut *cut, Secatel sec)
 {
 	fixSecatel(sec);
 
-	double tg = cutTan(cut);
+	double tg = cut->tan();
 
-	setPointVisibility(*(cut->begin), sec);
-	setPointVisibility(*(cut->end), sec);
+	setPointVisibility(*(cut->getBegin()), sec);
+	setPointVisibility(*(cut->getEnd()), sec);
 
-	int status = checkCut(cut->begin->vis, cut->end->vis);
+	int status = checkCut(cut->getBegin()->vis, cut->getEnd()->vis);
 
 	if (status == FULL_VISIBLE)
 	{
@@ -240,7 +239,7 @@ Cut* cutInside(Cut *cut, Secatel sec)
 	}
 	else if (status == FULL_UNVISIBLE)
 	{
-		return newCut(
+		new Cut(
 			newPoint(NO_POINT, NO_POINT),
 			newPoint(NO_POINT, NO_POINT)
 		);
@@ -251,10 +250,10 @@ Cut* cutInside(Cut *cut, Secatel sec)
 	Point *up = NULL;
 	Point *down = NULL;
 
-	left = move(&borderLeft, &whoLeft, cut, sec, tg);
-	right = move(&borderRight, &whoRight, cut, sec, tg);
-	up = move(&borderUp, &whoUp, cut, sec, tg);
-	down = move(&borderDown, &whoDown, cut, sec, tg);
+	left = move(&borderLeft, &whoLeft, *cut, sec, tg);
+	right = move(&borderRight, &whoRight, *cut, sec, tg);
+	up = move(&borderUp, &whoUp, *cut, sec, tg);
+	down = move(&borderDown, &whoDown, *cut, sec, tg);
 
 	Point *first = newPoint(NO_POINT, NO_POINT);
 	Point *second = newPoint(NO_POINT, NO_POINT);
@@ -266,12 +265,14 @@ Cut* cutInside(Cut *cut, Secatel sec)
 
 	if (isPointFree(second))
 	{
-		if (isPointVisible(cut->begin->vis))
-			second = cut->begin;
+		if (isPointVisible(cut->getBegin()->vis))
+			second = cut->getBegin();
 		else
-			second = cut->end;
+			second = cut->getEnd();
 	}
-
-	Cut* cuttt = newCut(first, second);
-	return cuttt;
+	Cut *forReturn = new Cut(first, second);
+	if  (checkCut(forReturn->getBegin()->vis, forReturn->getEnd()->vis) == FULL_VISIBLE)
+		return forReturn;
+	else
+		return new Cut(NO_POINT, NO_POINT, NO_POINT, NO_POINT);
 }

@@ -5,6 +5,7 @@
 typedef struct Secatel
 {
 	Point *p;
+	Point *n;
 	Secatel* next;
 } Secatel;
 

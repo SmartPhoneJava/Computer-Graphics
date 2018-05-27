@@ -7,23 +7,63 @@
 #define VERTICAL 1000000
 #define HORIZONTAL 0
 
-typedef struct Cut
+class Cut
 {
+private:
 	Point *begin;
 	Point *end;
-} Cut;
 
-double cutTan(Cut *cut);
+	int width() const noexcept;
 
-Cut* newCut(Point *a, Point *b);
+	int height() const noexcept;
 
-Cut* newCutInt(int x1, int y1, int x2, int y2);
+	void destroy() noexcept;
 
-void deleteCut(Cut **cut);
+public:
+	/*Конструкторы */
+	Cut();
+	Cut(Point *p1, Point *p2);
+	Cut(int x1, int y1, int x2, int y2);
+	Cut(const Point *p1, const Point *p2);
+	Cut(const Cut &cut);
+	~Cut();
 
-void debugCut(Cut *cut, const char* text, int number);
+	/*Установка поля Begin*/
+	void setBegin(Point *point) noexcept;
+	void setBegin(const Point *point) noexcept;
+	void setBegin(const int &x, const int &y) noexcept;
+	void setBegin() noexcept;
 
-void debugCutVisibility(Cut *cut, const char* text, int number);
+	/*Получение значения поля Begin*/
+	Point* getBegin() noexcept;
 
-bool compareCuts(Cut* A, Cut *B);
+	/*Установка поля End*/
+	void setEnd(Point *point) noexcept;
+	void setEnd(const Point *point) noexcept;
+	void setEnd(const int &x, const int &y) noexcept;
+	void setEnd() noexcept;
+
+	void status() noexcept;
+
+	/*Получение поля End*/
+	Point* getEnd() noexcept;
+	
+	Cut(Cut &&cut) noexcept;
+
+	Cut& operator=(const Cut& other) noexcept;
+
+	Cut& operator=(Cut&& other)noexcept;
+
+	void debugCut(
+		const char* text, int number)noexcept;
+
+	void debugCutVisibility(
+		const char* text, int number)noexcept;
+
+	bool compareWithCut(
+		const Cut &B)noexcept;
+
+	double tan() const noexcept;
+
+};
 

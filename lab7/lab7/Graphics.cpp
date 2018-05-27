@@ -50,18 +50,18 @@ void draw2Points(HDC hdc, Point *p1,
 }
 
 // Рисование структуры отрезка
-void drawCut(HDC hdc, Cut *cut, DWORD color)
+void drawCut(HDC hdc, Cut cut, DWORD color)
 {
-	draw2Points(hdc, cut->begin, cut->end, color);
+	draw2Points(hdc, cut.getBegin(), cut.getEnd(), color);
 }
 
 // Рисование отрезка внутри секатора
 void drawCutInside(HDC hdc, Cut *cut,
 	Secatel sec, DWORD color)
 {
-	debugCut(cut, "cutInside", 1);
-	debugCut(cutInside(cut, sec), "cutInside", 0);
-	drawCut(hdc, cutInside(cut, sec), color);
+	cut->debugCut("cutInside", 1);
+	cutInside(cut, sec)->debugCut("cutInside", 0);
+	drawCut(hdc, *cutInside(cut, sec), color);
 }
 
 // Рисование отрезков таблицы внутри секатора
@@ -106,9 +106,12 @@ void drawSecatel(HDC hdc, Secatel sec, DWORD color)
 void drawTable(HDC hdc, Table* table, DWORD color)
 {
 	Table* mov = table;
+	Cut *cut = new Cut();
 	while (mov != NULL)
 	{
-		drawCut(hdc, mov->cut, color);
+		cut = mov->cut;
+		cut->debugCut("and it", 0);
+		drawCut(hdc, *cut, color);
 		mov = mov->next;
 	}
 }
@@ -125,7 +128,6 @@ void drawPicture(HWND hWnd, Table* table,
 void cleanRectOld(HWND hWnd, LONG left,
 	LONG top, LONG right, LONG bottom)
 {
-	PAINTSTRUCT ps;
 	RECT rect;
 	HDC hdc = GetDC(hWnd);
 
