@@ -1,12 +1,16 @@
 #pragma once
 #include "Point.h"
 #include "Cut.h"
+#include "Table.h"
 #include "Debug.h"
-#include "Secatel.h"
 #include <iostream>
 
-Cut* cutInside(Cut *cut, Secatel sec);
+#define SECATEL_NO -2
+#define SECATEL_IS_ONE_CUT -3
+#define SECATEL_ISNT_CONVEX 0
+#define SECATEL_INSIDE_RIGHT 1
+#define SECATEL_INSIDE_LEFT -1
 
-bool nearAB(int a, int b);
+int IsConvexFigure(Table *figure);
 
-void setIfBool(int &a, int set, bool b);
+Cut *build(Cut* cut, Table *secatel, int r);

@@ -1,6 +1,5 @@
 #pragma once
 #include <Windows.h>
-#include "Secatel.h"
 #include "Point.h"
 #include "Alg.h"
 #include "Cut.h"
@@ -15,13 +14,7 @@
 void drawLine(HDC hdc, int X1, int Y1,
 	int X2, int Y2, DWORD color);
 
-void drawCut(HDC hdc, Cut *cut, DWORD color);
-
-void drawCutInside(HDC hdc, Cut *cut,
-	Secatel sec, DWORD color);
-
-void drawSecatel(HDC hdc, Secatel sec,
-	DWORD color);
+void drawCut(HDC hdc, Cut cut, DWORD color);
 
 void drawEllipse(HDC hdc, int X,
 	int Y, int rad, DWORD color);
@@ -31,17 +24,17 @@ void drawPoint(HDC hdc, Point *p,
 
 void drawTable(HDC hdc, Table* table, DWORD color);
 
-RECT getRect(HWND hWnd);
+//RECT getRect(HWND hWnd);
 
 void cleanRectOld(HWND hWnd, LONG left,
 	LONG top, LONG right, LONG bottom);
 
-void cleanDisplay(HWND hWnd);
+//void cleanDisplay(HWND hWnd);
 
-void cleanRect(HDC hdc, RECT rect);
+//void cleanRect(HDC hdc, RECT rect);
 
-void drawPicture(HWND hWnd, Table* table,
-	Secatel *sec, DWORD color);
+void drawPicture(HWND hWnd, Table *table,
+	Table *secatel, DWORD color);
 
-void drawTableInside(HDC hdc, Table *table,
-	Secatel sec, DWORD color);
+int drawTableInside(HDC hdc, Table *table,
+	Table* secatel, DWORD color);

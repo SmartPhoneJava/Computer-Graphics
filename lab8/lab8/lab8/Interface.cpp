@@ -28,65 +28,22 @@ borderX - максмальное значения X
 x, y - значения параметров которые обновятся
 count - счётчик кликов
 */
-void mouseClicked(LPARAM lParam, int borderX,
-	int &x, int &y, HWND hWnd, int ID1, int ID2)
+
+void getMouseCoordinates(LPARAM lParam,
+	int borderX, int &x, int &y)
 {
 	if (LOWORD(lParam) < borderX)
 	{
 		x = LOWORD(lParam);
 		y = HIWORD(lParam);
-		setIntText(hWnd, ID1, x);
-		setIntText(hWnd, ID2, y);
 	}
 }
 
-void secatelControl(LPARAM lParam, Secatel &secatel, int &catched, int borderX)
+void setMouseCoordinates(HWND hWnd, int x,
+	int y, int ID1, int ID2)
 {
-	if (LOWORD(lParam) < borderX)
-	{
-		int x, y;
-		x = LOWORD(lParam);
-		y = HIWORD(lParam);
-
-		bool left, right, top, bottom;
-
-		left = nearAB(x, secatel.Xmin);
-		right = nearAB(x, secatel.Xmax);
-		top = nearAB(y, secatel.Ymin);
-		bottom = nearAB(y, secatel.Ymax);
-
-		if (!catched)
-		{
-			setIfBool(catched, LEFT, left);
-			setIfBool(catched, RIGHT, right);
-			setIfBool(catched, TOP, top);
-			setIfBool(catched, BOTTOM, bottom);
-
-			setIfBool(catched, LEFT_BOTTOM, left && bottom);
-			setIfBool(catched, RIGHT_BOTTOM, right && bottom);
-			setIfBool(catched, LEFT_TOP, left && top);
-			setIfBool(catched, RIGHT_TOP, right && top);
-		}
-		else
-		{
-			setIfBool(secatel.Xmin, x, (catched == LEFT));
-			setIfBool(secatel.Xmax, x, (catched == RIGHT));
-			setIfBool(secatel.Ymin, y, (catched == TOP));
-			setIfBool(secatel.Ymax, y, (catched == BOTTOM));
-
-			setIfBool(secatel.Xmin, x, (catched == LEFT_BOTTOM));
-			setIfBool(secatel.Ymax, y, (catched == LEFT_BOTTOM));
-
-			setIfBool(secatel.Xmax, x, (catched == RIGHT_BOTTOM));
-			setIfBool(secatel.Ymax, y, (catched == RIGHT_BOTTOM));
-
-			setIfBool(secatel.Xmin, x, (catched == LEFT_TOP));
-			setIfBool(secatel.Ymin, y, (catched == LEFT_TOP));
-
-			setIfBool(secatel.Xmax, x, (catched == RIGHT_TOP));
-			setIfBool(secatel.Ymin, y, (catched == RIGHT_TOP));
-		}
-	}
+		setIntText(hWnd, ID1, x);
+		setIntText(hWnd, ID2, y);
 }
 
 void addListViewItem(HWND ListView, int x1, int y1, int x2, int y2)
@@ -161,7 +118,7 @@ Table* adding(HWND hWnd, Table *table)
 
 	addListViewItem(listview, x1, y1, x2, y2);
 
-	Cut *cut = newCutInt(x1, y1, x2, y2);
+	Cut *cut = new Cut(x1, y1, x2, y2);
 	return addToTable(table, cut);
 }
 
@@ -204,7 +161,7 @@ void updateRow(int index, HWND hWnd,
 
 void updatingListView(HWND hWnd, LPARAM lParam, 
 	int &listview_choosen, int &x1, int &y1,
-	int &x2, int &y2, Table* table, Secatel *sec)
+	int &x2, int &y2, Table* lines, Table *secatel)
 {
 	HWND listview = GetDlgItem(hWnd, ID_LISTVIEW);
 
@@ -228,7 +185,7 @@ void updatingListView(HWND hWnd, LPARAM lParam,
 
 	HDC hdc = GetDC(hWnd);
 
-	drawPicture(hWnd, table, sec, RGB(0, 0, 50));
+	drawPicture(hWnd, lines, secatel, RGB(0, 0, 50));
 
 	drawEllipse(hdc, x1, y1, 4, RGB(0, 0, 0));
 	drawEllipse(hdc, x1, y1, 3, RGB(200, 200, 200));
@@ -245,9 +202,9 @@ void deleting(HWND hWnd, int listview_choosen,
 	deleteListViewItem(GetDlgItem(hWnd, ID_LISTVIEW),
 		listview_choosen);
 
-	Cut *cut = newCutInt(x1, y1, x2, y2);
-	table = deleteOfTable(table, cut);
-	deleteCut(&cut);
+	Cut cut(x1, y1, x2, y2);
+	table = deleteOfTable(table, &cut);
+	delete &cut;
 
 	EnableWindow(GetDlgItem(hWnd, ID_BUTTON_DELETE), FALSE);
 	EnableWindow(GetDlgItem(hWnd, ID_BUTTON_CHANGE), FALSE);
@@ -267,13 +224,13 @@ void changing(HWND hWnd, int listview_choosen,
 
 	addListViewItem(listview, x1, y1, x2, y2);
 
-	Cut *oldCut = newCutInt(old_x1, old_y1, old_x2, old_y2);
-	Cut *newCut = newCutInt(x1, y1, x2, y2);
+	Cut oldCut(old_x1, old_y1, old_x2, old_y2);
+	Cut newCut(x1, y1, x2, y2);
 
-	changeTable(table, oldCut, newCut);
+	changeTable(table, &oldCut, &newCut);
 
-	deleteCut(&oldCut);
-	deleteCut(&newCut);
+	delete &oldCut;
+	delete &newCut;
 
 	EnableWindow(GetDlgItem(hWnd, ID_BUTTON_DELETE), FALSE);
 	EnableWindow(GetDlgItem(hWnd, ID_BUTTON_CHANGE), FALSE);

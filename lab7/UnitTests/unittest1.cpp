@@ -4,12 +4,11 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-//namespace UnitTests
-//{		
+
 	TEST_CLASS(CutTest)
 	{
 	public:
-		
+
 		TEST_METHOD(newCut_t)
 		{
 			int a = 3;
@@ -42,21 +41,16 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 		*/
 
 	};
+	TEST_CLASS(CutTest1)
+	{
+	public:
+		TEST_METHOD(newCut_t)
+		{
+			int a = 3;
+			int b = 3;
 
-	/*
-Cut* newCutInt(int x1, int y1, int x2, int y2);
+			Assert::AreEqual(a, b, L"message", LINE_INFO());
+		}
+		
 
-void deleteCut(Cut **cut);
-
-void debugCut(Cut *cut, const char* text, int number);
-
-void debugCutVisibility(Cut *cut, const char* text, int number);
-
-bool compareCuts(Cut* A, Cut *B);
-
-Cut* cutInside(Cut *cut, Secatel sec);
-
-bool nearAB(int a, int b);
-
-void setIfBool(int &a, int set, bool b);
-*/
+	};

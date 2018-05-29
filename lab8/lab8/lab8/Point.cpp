@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Point.h"
-#include "Secatel.h"
 #include <iostream>
 
 Point* newPoint(int x, int y)
@@ -24,10 +23,6 @@ bool isPointFree(Point *point)
 	return (x && y);
 }
 
-void setPointVisibility(Point &p, Secatel s)
-{
-	..
-}
 
 void debugPoint(Point *point, const char* text, int number)
 {

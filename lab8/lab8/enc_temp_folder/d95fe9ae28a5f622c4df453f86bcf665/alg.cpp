@@ -74,25 +74,36 @@ Cut *build(Cut* cut, Table *secatel, int r)
 		гранничной точки от р1(берем граничную
 		точку равной вершине)
 		*/
+		delete w; // P1 - f1
 		w = new Cut(move->cut->getBegin(),
 			cut->getBegin());
+		//p = new Cut(cut->getBegin(),
+		//	cut->getEnd());
+
+		//delete n;
 
 		x1 = 0;
 		y1 = 0;
 
-		x2 = -r * move->cut->height();
-		y2 = r * move->cut->width();
+		x2 = -r * move->cut->height(); //xk 
+		y2 = r * move->cut->width(); // yk
 
 		n = Cut(x1, y1, x2, y2);
 
 		dscalar = cut->scalarMultyplication(n);
 		wscalar = w->scalarMultyplication(n);
 
+		debug("dscalar", dscalar);
+		debug("wscalar", wscalar);
+		debug("wwww", move->cut->scalarMultyplication(n));
+
 		// Если отрезок параллелен ребру отсекателя
 		if (dscalar == 0)
 		{ // Отрезок невидим
 			if (wscalar < 0)
 			{
+				//delete w;
+				//delete n;
 				return new Cut();
 			}
 			// else continue
@@ -105,8 +116,10 @@ Cut *build(Cut* cut, Table *secatel, int r)
 
 			if (dscalar > 0)
 			{ // поиск нижнего
+				debugDouble("dscalar > 0", t);
 				if (t > 1)
 				{ // начало видимой части за
+					debugDouble("return2", t);
 					return new Cut();
 				} // отсекателем
 				else
@@ -116,8 +129,10 @@ Cut *build(Cut* cut, Table *secatel, int r)
 			}
 			else
 			{ // поиск верхнего
+				debugDouble("dscalar <= 0", t);
 				if (t < 0)
 				{
+					debugDouble("return3", t);
 					return new Cut();
 				}
 				else

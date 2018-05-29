@@ -17,16 +17,18 @@
 #define LEFT_BOTTOM 7
 #define RIGHT_BOTTOM 8
 
+#define NO_NEED -1
+
 
 void setCharText(HWND hwnd, const char* text);
 
 void setIntText(HWND hWnd, int ID, int d);
 
-void mouseClicked(LPARAM lParam, int borderX,
-	 int &x, int &y, HWND hWnd, int ID1, int ID2);
+void getMouseCoordinates(LPARAM lParam,
+	int borderX, int &x, int &y);
 
-void secatelControl(LPARAM lParam,
-	Secatel &secatel, int &catched, int borderX);
+void setMouseCoordinates(HWND hWnd, int x,
+	int y, int ID1, int ID2);
 
 void deleteListViewItem(HWND listview, int i);
 
@@ -34,7 +36,7 @@ Table* adding(HWND hWnd, Table *table);
 
 void updatingListView(HWND hWnd, LPARAM lParam,
 	int &listview_choosen, int &x1, int &y1,
-	int &x2, int &y2, Table* table, Secatel *sec);
+	int &x2, int &y2, Table* lines, Table *secatel);
 
 void deleting(HWND hWnd, int listview_choosen,
 	int x1, int y1, int x2, int y2, Table* table);

@@ -31,7 +31,7 @@ Table* searchTable(Table* table, Cut *cut)
 
 	while (mov != NULL)
 	{
-		if (isCutInTable(mov, cut))
+		if (isCutInTable(mov, *cut))
 			break;
 		mov = mov->next;
 	}
@@ -57,9 +57,9 @@ Table* addToTable(Table* table, Cut *cut)
 	return table;
 }
 
-bool isCutInTable(Table *A, Cut *cut)
+bool isCutInTable(Table *A, const Cut &cut)
 {
-	return compareCuts(A->cut, cut);
+	return (A->cut)->compareWithCut(cut);
 }
 
 Table* deleteOfTable(Table* table, Cut *cut)
@@ -67,7 +67,7 @@ Table* deleteOfTable(Table* table, Cut *cut)
 	if (!table)
 		return NULL;
 	
-	if (isCutInTable(table, cut))
+	if (isCutInTable(table, *cut))
 	{
 		return deleteTableAndGetNext(&table);
 	}
@@ -75,7 +75,7 @@ Table* deleteOfTable(Table* table, Cut *cut)
 	Table* mov = table;
 	while (mov->next != NULL)
 	{
-		if (isCutInTable(mov->next, cut))
+		if (isCutInTable(mov->next, *cut))
 			break;
 			
 		mov = mov->next;
@@ -119,7 +119,60 @@ void debugTable(Table* table, const char* text, int number)
 	while (mov != NULL)
 	{
 		count++;
-		debugCut(mov->cut, "cut(Table) ", count);
+		(mov->cut)->debugCut("cut(Table) ", count);
 		mov = mov->next;
 	}
+}
+
+Table *getLast(Table *table)
+{
+	Table* move = table;
+	while (move->next)
+	{
+		move = move->next;
+	}
+	return move;
+}
+
+bool isLock(Table *table)
+{
+	return (table->cut->getBegin() ==
+		getLast(table)->cut->getEnd());
+}
+
+Table *lockTable(Table *table)
+{
+	if (!table || isLock(table))
+		return table;
+
+	return addToTable(table, new Cut(
+		getLast(table)->cut->getEnd(),
+		table->cut->getBegin())
+	);
+}
+
+Table* deleteLast(Table* table)
+{
+	if (!table)
+		return NULL;
+
+	Table* prev = table;
+	Table* move = table;
+	while (move->next)
+	{
+		prev = move;
+		move = move->next;
+	}
+	prev->next = NULL;
+
+
+	return table; //deleteOfTable(table, getLast(table)->cut);
+}
+
+Table* unlockTable(Table *table)
+{
+	if (!table)
+		return table;
+
+	return deleteLast(table);
 }

@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{7E151650-B588-4EEE-BA46-970DDF9B9D26}</ProjectGuid>
+    <ProjectGuid>{CD6295E7-D99A-4B5E-82DE-9A81019E8A52}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>lab8</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
@@ -155,11 +155,9 @@
     <ClInclude Include="lab8.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="Secatel.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Table.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Visibility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="alg.cpp" />
@@ -169,7 +167,6 @@
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="lab8.cpp" />
     <ClCompile Include="Point.cpp" />
-    <ClCompile Include="Secatel.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -177,7 +174,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Table.cpp" />
-    <ClCompile Include="Visibility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="lab8.rc" />

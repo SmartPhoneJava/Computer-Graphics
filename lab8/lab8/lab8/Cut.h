@@ -1,32 +1,71 @@
 #pragma once
 
 #include "Point.h"
-#include "Visibility.h"
 #include "Debug.h"
 
-#define VERTICAL 1000000
-#define HORIZONTAL 0
-
-typedef struct Cut
+class Cut
 {
+private:
 	Point *begin;
 	Point *end;
-} Cut;
 
-double cutTan(Cut *cut);
+	void destroy() noexcept;
 
-Cut* newCut(Point *a, Point *b);
+public:
+	/*Конструкторы */
+	Cut();
+	Cut(Point *p1, Point *p2);
+	Cut(int x1, int y1, int x2, int y2);
+	Cut(const Point *p1, const Point *p2);
+	Cut(const Cut &cut);
+	~Cut();
 
-Cut* newCutInt(int x1, int y1, int x2, int y2);
+	/*Установка поля Begin*/
+	void setBegin(Point *point) noexcept;
+	void setBegin(const Point *point) noexcept;
+	void setBegin(const int &x, const int &y) noexcept;
+	void setBegin() noexcept;
 
-void deleteCut(Cut **cut);
+	/*Получение значения поля Begin*/
+	Point* getBegin() noexcept;
 
-void debugCut(Cut *cut, const char* text, int number);
+	int getBX() const noexcept;
+	int getBY() const noexcept;
 
-void debugCutVisibility(Cut *cut, const char* text, int number);
+	/*Установка поля End*/
+	void setEnd(Point *point) noexcept;
+	void setEnd(const Point *point) noexcept;
+	void setEnd(const int &x, const int &y) noexcept;
+	void setEnd() noexcept;
 
-bool compareCuts(Cut* A, Cut *B);
+	void status() noexcept;
 
-int getCutDX(Cut *cut);
+	/*Получение поля End*/
+	Point* getEnd() noexcept;
 
-int getCutDY(Cut *cut);
+	int getEX() const noexcept;
+	int getEY() const noexcept;
+	
+	Cut(Cut &&cut) noexcept;
+
+	Cut& operator=(const Cut& other) noexcept;
+
+	Cut& operator=(Cut&& other)noexcept;
+
+	void debugCut(
+		const char* text, int number)noexcept;
+
+	int width() const noexcept;
+
+	int height() const noexcept;
+
+	// Векторное произведение
+	int vectorMultiplication(const Cut &cut) const noexcept;
+
+	// Скалярное произведение
+	int scalarMultyplication(const Cut &cut) const noexcept;
+
+	bool compareWithCut(
+		const Cut &B)noexcept;
+};
+
