@@ -57,11 +57,17 @@ void drawCut(HDC hdc, Cut cut, DWORD color)
 int drawTableInside(HDC hdc, Table *table,
 	Table* secatel, DWORD color)
 {
+	if (!table && !secatel)
+		return NO_CUTS_AND_SECATEL;
+
+	if (!table)
+		return NO_CUTS;
+
 	Table* mov = table;
 	
 	int r = IsConvexFigure(secatel);
 	if (r != SECATEL_INSIDE_RIGHT && r != SECATEL_INSIDE_LEFT)
-		return r;
+		return SECATEL_ISNT_CONVEX;
 
 	Cut *cut;
 
@@ -75,7 +81,7 @@ int drawTableInside(HDC hdc, Table *table,
 	return NOERROR;
 }
 
-// Отрисовка отрезков
+// Отрисовка отрезка или списка рёбер
 void drawTable(HDC hdc, Table* table, DWORD color)
 {
 	Table* mov = table;
@@ -115,25 +121,5 @@ void cleanRectOld(HWND hWnd, LONG left,
 		rect.bottom = bottom;
 
 	FillRect(hdc, &rect, (HBRUSH)(COLOR_WINDOW + 1));
-	ReleaseDC(hWnd, hdc);
-}
-
-RECT getRect(HWND hWnd)
-{
-	RECT rect;
-	GetClientRect(hWnd, &rect);
-	return rect;
-}
-
-void cleanRect(HDC hdc, RECT rect)
-{
-	FillRect(hdc, &rect, (HBRUSH)(COLOR_WINDOW + 1));
-}
-
-void cleanDisplay(HWND hWnd)
-{
-	RECT rect = getRect(hWnd);
-	HDC hdc = GetDC(hWnd);
-	cleanRect(hdc, rect);
 	ReleaseDC(hWnd, hdc);
 }

@@ -251,6 +251,12 @@ void creating(HWND hWnd)
 	TCHAR text_x2[BUFFER_MAX_SIZE] = "X2";
 	TCHAR text_y2[BUFFER_MAX_SIZE] = "Y2";
 
+	TCHAR text_sec[BUFFER_MAX_SIZE] = "Ребра секатора";
+	TCHAR text_cuts[BUFFER_MAX_SIZE] = "Отрезки";
+	TCHAR text_verthor[BUFFER_MAX_SIZE] = "Верт. или гор. отрезки";
+	TCHAR text_draw[BUFFER_MAX_SIZE] = "Ввод мышью";
+	TCHAR text_lock[BUFFER_MAX_SIZE] = "Замкнуть";
+
 	RECT rc;
 	GetClientRect(hWnd, &rc);
 
@@ -268,6 +274,25 @@ void creating(HWND hWnd)
 		rc.right - 200, 22, 100, 20, hWnd, (HMENU)ID_BUTTON_CLEAR, NULL, NULL);
 	CreateWindow(text_button, text_change, WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE,
 		rc.right - 100, 2, 98, 20, hWnd, (HMENU)ID_BUTTON_CHANGE, NULL, NULL);
+	CreateWindow(text_button, text_lock, WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE,
+		rc.right - 100, 2, 98, 20, hWnd, (HMENU)ID_BUTTON_LOCK, NULL, NULL);
+
+	CreateWindow(text_button, text_draw, BS_GROUPBOX | WS_CHILD | WS_VISIBLE,
+		rc.right - 320, 190, 280, 140, hWnd, (HMENU)ID_RGROUP, NULL, NULL);
+	CreateWindow(text_button, text_cuts,
+		BS_AUTORADIOBUTTON | WS_CHILD | WS_VISIBLE,
+		rc.right - 300, 95, 270, 30, hWnd,
+		(HMENU)ID_RBUTTON_CUTS, NULL, NULL);
+	CreateWindow(text_button, text_verthor,
+		BS_AUTORADIOBUTTON | WS_CHILD | WS_VISIBLE,
+		rc.right - 300, 95, 270, 30, hWnd,
+		(HMENU)ID_RBUTTON_VERTICAL, NULL, NULL);
+	HWND hwnd1 = CreateWindow(text_button, text_sec,
+		BS_AUTORADIOBUTTON | WS_CHILD | WS_VISIBLE,
+		rc.right - 300, 125, 270, 30, hWnd,
+		(HMENU)ID_RBUTTON_SECATEL, NULL, NULL);
+
+	SendMessage(hwnd1, BM_SETCHECK, BST_CHECKED, 0);
 
 	CreateWindow(text_edit, text_0, usual, rc.right - 265,
 		50, 100, 20, hWnd, (HMENU)ID_EDIT_X1, NULL, NULL);
@@ -331,6 +356,7 @@ void moving(HWND hWnd, int with_clean)
 	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_CLEAR), rc.right - 200, 22, 100, 20, 0);
 
 	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_CHANGE), rc.right - 100, 2, 98, 20, 0);
+	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_LOCK), rc.right - 100, 22, 98, 20, 0);
 
 	MoveWindow(GetDlgItem(hWnd, ID_NEDIT_X1), rc.right - 300, 50, 25, 20, 0);
 	MoveWindow(GetDlgItem(hWnd, ID_EDIT_X1), rc.right - 270, 50, 110, 20, 0);
@@ -344,5 +370,10 @@ void moving(HWND hWnd, int with_clean)
 	MoveWindow(GetDlgItem(hWnd, ID_EDIT_Y2), rc.right - 110, 75, 110, 20, 0);
 	MoveWindow(GetDlgItem(hWnd, ID_NEDIT_Y2), rc.right - 140, 75, 25, 20, 0);
 
-	MoveWindow(GetDlgItem(hWnd, ID_LISTVIEW), rc.right - 300, 150, 300, rc.bottom - 100, 0);
+	MoveWindow(GetDlgItem(hWnd, ID_RGROUP), rc.right - 300, 100, 300, 80, 0);
+	MoveWindow(GetDlgItem(hWnd, ID_RBUTTON_CUTS), rc.right - 290, 125, 140, 20, 0);
+	MoveWindow(GetDlgItem(hWnd, ID_RBUTTON_SECATEL), rc.right - 150, 125, 140, 20, 0);
+	MoveWindow(GetDlgItem(hWnd, ID_RBUTTON_VERTICAL), rc.right - 290, 150, 280, 20, 0);
+
+	MoveWindow(GetDlgItem(hWnd, ID_LISTVIEW), rc.right - 300, 200, 300, rc.bottom - 100, 0);
 }
