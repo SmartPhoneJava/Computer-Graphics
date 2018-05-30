@@ -38,6 +38,41 @@ Table* searchTable(Table* table, Cut *cut)
 	return mov;
 }
 
+Table* addToTablePoint(Table* table, Point* p)
+{
+	Point* tmp = newPoint(NO_POINT, NO_POINT);
+	Cut* cut = new Cut(p, tmp);
+	if (!table)
+	{
+		return newTable(cut);
+	}
+	if (isPointFree(table->cut->getEnd()))
+	{
+		table->cut->setEnd(p);
+		return table;
+	}
+	Table* mov = table;
+
+	int found = false;
+
+	while (mov->next != NULL)
+	{
+		if (isPointFree(mov->cut->getEnd()))
+		{
+			debug("isPointFree", 1);
+			mov->cut->setEnd(p);
+			found = true;
+			break;
+		}
+		mov = mov->next;
+	}
+	if (!found)
+	{
+		mov->next = newTable(cut);
+	}
+	return table;
+}
+
 Table* addToTable(Table* table, Cut *cut)
 {
 	if (!table)
@@ -136,6 +171,8 @@ Table *getLast(Table *table)
 
 bool isLock(Table *table)
 {
+	if (!table)
+		return false;
 	return (table->cut->getBegin() ==
 		getLast(table)->cut->getEnd());
 }
@@ -171,7 +208,7 @@ Table* deleteLast(Table* table)
 
 Table* unlockTable(Table *table)
 {
-	if (!table)
+	if (!table || !isLock(table))
 		return table;
 
 	return deleteLast(table);

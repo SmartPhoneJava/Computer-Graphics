@@ -16,3 +16,5 @@
 int IsConvexFigure(Table *figure);
 
 Cut *build(Cut* cut, Table *secatel, int r);
+
+Table *build9(Table* cuts, Table *secatel, int r);

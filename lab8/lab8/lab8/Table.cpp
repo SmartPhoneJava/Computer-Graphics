@@ -171,7 +171,7 @@ Table* deleteLast(Table* table)
 
 Table* unlockTable(Table *table)
 {
-	if (!table)
+	if (!table || !isLock(table))
 		return table;
 
 	return deleteLast(table);

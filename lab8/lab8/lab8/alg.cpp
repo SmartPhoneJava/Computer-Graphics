@@ -55,6 +55,7 @@ int IsConvexFigure(Table *figure)
 	return equal * curr;
 }
 
+
 Cut *build(Cut* cut, Table *secatel, int r)
 {
 	// нижнее и верхнее t

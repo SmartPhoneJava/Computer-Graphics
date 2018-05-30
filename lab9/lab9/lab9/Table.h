@@ -16,6 +16,8 @@ Table* searchTable(Table* table, Cut *cut);
 
 Table* addToTable(Table* table, Cut *cut);
 
+Table* addToTablePoint(Table* table, Point* p);
+
 bool isCutInTable(Table *A, const Cut &cut);
 
 Table* deleteOfTable(Table* table, Cut *cut);
@@ -30,3 +32,5 @@ void debugTable(Table* table, const char* text, int number);
 Table *lockTable(Table *table);
 
 Table *unlockTable(Table *table);
+
+bool isLock(Table *table);

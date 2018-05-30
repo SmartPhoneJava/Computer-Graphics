@@ -30,3 +30,5 @@ void debugTable(Table* table, const char* text, int number);
 Table *lockTable(Table *table);
 
 Table *unlockTable(Table *table);
+
+bool isLock(Table *table);

@@ -71,12 +71,10 @@ int drawTableInside(HDC hdc, Table *table,
 
 	Cut *cut;
 
-	while (mov)
-	{
-		cut = build(mov->cut, secatel, r);
-		drawCut(hdc, *cut, color);
-		mov = mov->next;
-	}
+	Table *ret = build9(table, secatel, r);
+
+	drawTable(hdc, ret, RGB(0, 255, 0));
+	
 	drawTable(hdc, secatel, RGB(255, 0, 0));
 	return NOERROR;
 }
