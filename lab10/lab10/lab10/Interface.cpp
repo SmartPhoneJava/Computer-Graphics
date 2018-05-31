@@ -119,7 +119,7 @@ Table* adding(HWND hWnd, Table *table)
 	addListViewItem(listview, x1, y1, x2, y2);
 
 	Cut *cut = new Cut(x1, y1, x2, y2);
-	return addToTable(table, newPoint(x2, y2));
+	return addToTable(table, cut);
 }
 
 void updateColumn(int col, LV_ITEM lvi, 
@@ -203,7 +203,7 @@ void deleting(HWND hWnd, int listview_choosen,
 		listview_choosen);
 
 	Cut cut(x1, y1, x2, y2);
-	table = deleteOfTable(table, newPoint(x2, y2));
+	table = deleteOfTable(table, &cut);
 	delete &cut;
 
 	EnableWindow(GetDlgItem(hWnd, ID_BUTTON_DELETE), FALSE);
@@ -227,11 +227,10 @@ void changing(HWND hWnd, int listview_choosen,
 	Cut oldCut(old_x1, old_y1, old_x2, old_y2);
 	Cut newCut(x1, y1, x2, y2);
 
-	changeTable(table, newPoint(old_x2, old_y2),
-		newPoint(x2, y2));
+	changeTable(table, &oldCut, &newCut);
 
-	//delete &oldCut;
-	//delete &newCut;
+	delete &oldCut;
+	delete &newCut;
 
 	EnableWindow(GetDlgItem(hWnd, ID_BUTTON_DELETE), FALSE);
 	EnableWindow(GetDlgItem(hWnd, ID_BUTTON_CHANGE), FALSE);

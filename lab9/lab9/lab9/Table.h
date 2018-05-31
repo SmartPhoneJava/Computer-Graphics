@@ -4,7 +4,7 @@
 
 typedef struct Table
 {
-	Cut* cut;
+	Point* point;
 	Table* next;
 } Table;
 
@@ -12,25 +12,25 @@ Table* newTable(Cut *cut);
 
 void deleteTable(Table** t);
 
-Table* searchTable(Table* table, Cut *cut);
+Table* searchTable(Table* table, Point *p);
 
-Table* addToTable(Table* table, Cut *cut);
+Table* addToTable(Table* table, Point *p);
 
-Table* addToTablePoint(Table* table, Point* p);
+bool isPointInTable(Table *A, Point *p);
 
-bool isCutInTable(Table *A, const Cut &cut);
-
-Table* deleteOfTable(Table* table, Cut *cut);
+Table* deleteOfTable(Table* table, Point *p);
 
 int getTableSize(Table* table);
 
 void changeTable(Table* table,
-	Cut *oldCut, Cut *newCut);
+	Point *oldPoint, Point *newPoint);
 
 void debugTable(Table* table, const char* text, int number);
 
-Table *lockTable(Table *table);
+Table* deleteLast(Table* table);
 
-Table *unlockTable(Table *table);
+//Table *lockTable(Table *table);
 
-bool isLock(Table *table);
+//Table *unlockTable(Table *table);
+
+//bool isLock(Table *table);

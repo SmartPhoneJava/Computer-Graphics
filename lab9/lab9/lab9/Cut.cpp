@@ -116,9 +116,19 @@ int Cut::vectorMultiplication(const Cut &cut) const noexcept
 	return width() * cut.height() - cut.width() * height();
 }
 
+int Cut::vectorMultiplication(Cut *cut) const noexcept
+{
+	return width() * cut->height() - cut->width() * height();
+}
+
 int Cut::scalarMultyplication(const Cut &cut) const noexcept
 {
 	return width() * cut.width() + height() * cut.height();
+}
+
+int Cut::scalarMultyplication(Cut *cut) const noexcept
+{
+	return width() * cut->width() + height() * cut->height();
 }
 
 

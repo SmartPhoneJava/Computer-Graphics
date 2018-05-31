@@ -29,21 +29,22 @@ void drawEllipse(HDC hdc, int X,
 void drawPoint(HDC hdc, Point *p,
 	int rad, DWORD color)
 {
-	drawEllipse(hdc, p->x,
-		p->y, rad, color);
+	drawEllipse(hdc, p->getX(),
+		p->getY(), rad, color);
 }
 
 // Рисование двух структур точек
 void draw2Points(HDC hdc, Point *p1,
 	Point *p2, DWORD color)
 {
-	if (isPointFree(p1))
+	if (p1->isFree())
 		return;
-	else if (isPointFree(p2))
+	else if (p2->isFree())
 		return;
 	else
 	{
-		drawLine(hdc, p1->x, p1->y, p2->x, p2->y, color);
+		drawLine(hdc, p1->getX(), p1->getY(),
+			p2->getX(), p2->getY(), color);
 	}
 }
 
@@ -53,6 +54,7 @@ void drawCut(HDC hdc, Cut cut, DWORD color)
 	draw2Points(hdc, cut.getBegin(), cut.getEnd(), color);
 }
 
+/*
 // Рисование отрезков таблицы внутри секатора
 int drawTableInside(HDC hdc, Table *table,
 	Table* secatel, DWORD color)
@@ -71,25 +73,26 @@ int drawTableInside(HDC hdc, Table *table,
 
 	Cut *cut;
 
-	Table *ret = build9(table, secatel, r);
-
-	drawTable(hdc, ret, RGB(0, 255, 0));
-	
+	while (mov)
+	{
+		cut = build(mov->cut, secatel, r);
+		drawCut(hdc, *cut, color);
+		mov = mov->next;
+	}
 	drawTable(hdc, secatel, RGB(255, 0, 0));
 	return NOERROR;
 }
+*/
 
 // Отрисовка отрезка или списка рёбер
 void drawTable(HDC hdc, Table* table, DWORD color)
 {
-	if (!table)
-		return;
-
 	Table* mov = table;
 	Cut *cut = new Cut();
-	while (mov->next != NULL)
+	while (mov != NULL)
 	{
-		draw2Points(hdc, mov->point, mov->next->point, color);
+		cut = mov->cut;
+		drawCut(hdc, *cut, color);
 		mov = mov->next;
 	}
 }

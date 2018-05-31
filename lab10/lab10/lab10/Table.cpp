@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Table.h"
 
-Table* newTable(Point *point)
+Table* newTable(Cut *cut)
 {
 	Table* table = (Table*)calloc(1, sizeof(Table));
-	table->point = point;
+	table->cut = cut;
 	table->next = NULL;
 	return table;
 }
@@ -25,24 +25,24 @@ Table* deleteTableAndGetNext(Table** t)
 	return ret;
 }
 
-Table* searchTable(Table* table, Point *Point)
+Table* searchTable(Table* table, Cut *cut)
 {
 	Table* mov = table;
 
 	while (mov != NULL)
 	{
-		if (isPointInTable(mov, Point))
+		if (isCutInTable(mov, *cut))
 			break;
 		mov = mov->next;
 	}
 	return mov;
 }
 
-Table* addToTable(Table* table, Point *point)
+Table* addToTable(Table* table, Cut *cut)
 {
 	if (!table)
 	{
-		return newTable(point);
+		return newTable(cut);
 	}
 
 	Table* mov = table;
@@ -52,22 +52,22 @@ Table* addToTable(Table* table, Point *point)
 		mov = mov->next;
 	}
 
-	mov->next = newTable(point);
+	mov->next = newTable(cut);
 
 	return table;
 }
 
-bool isPointInTable(Table *A, Point *point)
+bool isCutInTable(Table *A, const Cut &cut)
 {
-	return (A->point == point);
+	return (A->cut)->compareWithCut(cut);
 }
 
-Table* deleteOfTable(Table* table, Point *point)
+Table* deleteOfTable(Table* table, Cut *cut)
 {
 	if (!table)
 		return NULL;
 	
-	if (isPointInTable(table, point))
+	if (isCutInTable(table, *cut))
 	{
 		return deleteTableAndGetNext(&table);
 	}
@@ -75,7 +75,7 @@ Table* deleteOfTable(Table* table, Point *point)
 	Table* mov = table;
 	while (mov->next != NULL)
 	{
-		if (isPointInTable(mov->next, point))
+		if (isCutInTable(mov->next, *cut))
 			break;
 			
 		mov = mov->next;
@@ -86,13 +86,12 @@ Table* deleteOfTable(Table* table, Point *point)
 	return table;
 }
 
-void changeTable(Table* table,
-	Point *oldPoint, Point *newPoint)
+void changeTable(Table* table, Cut *oldCut, Cut *newCut)
 {
-	Table *tab = searchTable(table, oldPoint);
+	Table *tab = searchTable(table, oldCut);
 	if (tab)
 	{
-		tab->point = newPoint;
+		tab->cut = newCut;
 	}
 }
 
@@ -120,7 +119,7 @@ void debugTable(Table* table, const char* text, int number)
 	while (mov != NULL)
 	{
 		count++;
-		debugPoint(mov->point, "cut(Table) ", count);
+		(mov->cut)->debugCut("cut(Table) ", count);
 		mov = mov->next;
 	}
 }
@@ -137,9 +136,8 @@ Table *getLast(Table *table)
 
 bool isLock(Table *table)
 {
-	if (!table)
-		return false;
-	return (table->point == getLast(table)->point);
+	return (table->cut->getBegin() ==
+		getLast(table)->cut->getEnd());
 }
 
 Table *lockTable(Table *table)
@@ -147,7 +145,10 @@ Table *lockTable(Table *table)
 	if (!table || isLock(table))
 		return table;
 
-	return addToTable(table, table->point);
+	return addToTable(table, new Cut(
+		getLast(table)->cut->getEnd(),
+		table->cut->getBegin())
+	);
 }
 
 Table* deleteLast(Table* table)
