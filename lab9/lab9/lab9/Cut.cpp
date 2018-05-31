@@ -93,8 +93,8 @@ Cut::Cut(int x1, int y1, int x2, int y2)
 
 Cut::Cut(Point *p1, Point *p2)
 {
-	setBegin(p1);
-	setEnd(p2);
+	setBegin(new Point(*p1));
+	setEnd(new Point(*p2));
 }
 
 void Cut::status() noexcept

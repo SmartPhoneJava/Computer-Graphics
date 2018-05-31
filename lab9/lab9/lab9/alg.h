@@ -7,6 +7,7 @@
 #include <iostream>
 
 #define SECATEL_NO -2
+#define SECATEL_IS_ONE_POINT -7
 #define SECATEL_IS_ONE_CUT -3
 #define NO_CUTS -4
 #define NO_CUTS_AND_SECATEL -5
@@ -15,7 +16,5 @@
 #define SECATEL_INSIDE_LEFT -1
 
 int IsConvexFigure(Table *figure);
-
-//Cut *build(Cut* cut, Table *secatel, int r);
 
 Table *build9(HDC hdc, Table* cuts, Table *secatel, int r);

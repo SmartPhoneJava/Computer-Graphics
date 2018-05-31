@@ -14,8 +14,13 @@ int sign(Point *a, Point *b, Point *c)
 {
 	Cut *cut1 = new Cut(a, b);
 	Cut *cut2 = new Cut(b, c);
-	return signOfNumber(
+	int number = signOfNumber(
 		cut1->vectorMultiplication(cut2));
+	debug("number", number);
+	return number;
+	//delete cut1;
+	//delete cut2;
+	//return number;
 }
 
 // Выпуклая ли фигура
@@ -24,7 +29,7 @@ int IsConvexFigure(Table *figure)
 	if (!figure) //Не задан секатель
 		return SECATEL_NO;
 	if (!figure->next) //В секателе 1 точка
-		return SECATEL_IS_ONE_CUT;
+		return SECATEL_IS_ONE_POINT;
 	if (!figure->next->next) //В секателе 1 отрезок
 		return SECATEL_IS_ONE_CUT;
 
@@ -47,8 +52,11 @@ int IsConvexFigure(Table *figure)
 	Пока есть ребра и знаки их векторных
 	произведений совпадают
 	*/
+	int i = 0;
 	while (move->next->next && equal)
 	{
+		i++;
+		debug("one", i);
 		curr = sign(
 			figure->point,
 			figure->next->point,
@@ -62,91 +70,6 @@ int IsConvexFigure(Table *figure)
 	return equal * curr;
 }
 
-bool isVisible(Point *a, Point *b, Cut *cut)
-{
-	Cut *c = new Cut(a, b);
-	int v = c->vectorMultiplication(*cut);
-	return (v > 0);
-}
-
-/*
-Table *build7(Table* cuts, Table *secatel, int r)
-{
-	Table* move_cut = cuts;
-	Table* move_sec = secatel;
-	Table* ret = NULL;
-	Point *s = NULL, *f = NULL;
-
-	Cut  *n = NULL, *w = NULL;
-
-	int dsk, wsk;
-
-	int x1, y1, x2, y2;
-
-	double t;
-
-	while(move_cut)
-	{
-		move_cut = cuts;
-		while (move_sec)
-		{
-			if (move_sec == secatel)
-			{
-				f = move_sec->cut->getBegin();
-			}
-			else
-			{
-				//d = new Cut(move_sec->cut->getBegin(), s);
-				
-				x1 = 0;
-				y1 = 0;
-
-				x2 = -r * move_sec->cut->height();
-				y2 = r * move_sec->cut->width();
-
-				n = new Cut(x1, y1, x2, y2);
-
-				dsk = move_cut->cut->scalarMultyplication(*n);
-				
-				if (dsk != 0)
-				{
-					w = new Cut(s, move_cut->cut->getBegin());
-					wsk = w->scalarMultyplication(*n);
-
-					t = -wsk / dsk;
-					if (t >= 0 && t <= 1)
-					{
-						x1 = s->x + (move_cut->cut->getBX() - s->x) * t;
-						y1 = s->y + (move_cut->cut->getBY() - s->y) * t;
-
-						Point *thp = newPoint(x1, y1);
-						debugPoint(thp, "addToTablePoint", 0);
-						ret = addToTablePoint(ret, thp);
-					}
-				}
-			}
-			x1 = 0;
-			y1 = 0;
-
-			x2 = -r * move_sec->cut->height();
-			y2 = r * move_sec->cut->width();
-			n = new Cut(x1, y1, x2, y2);
-			s = move_sec->cut->getBegin();
-
-			if (isVisible(s,
-				move_cut->cut->getBegin(), n))
-			{
-				debugPoint(s, "addToTablePoint", 1);
-				ret = addToTablePoint(ret, s);
-			}
-
-			move_sec = move_sec->next;
-		}
-		move_cut = move_cut->next;
-	}
-	return ret;
-}
-*/
 bool is_visible(Point *p, Point* p1, Point *p2, int r)
 {
 	Cut *a = new Cut(p1, p);
