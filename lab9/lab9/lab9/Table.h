@@ -29,8 +29,8 @@ void debugTable(Table* table, const char* text, int number);
 
 Table* deleteLast(Table* table);
 
-//Table *lockTable(Table *table);
+Table *lockTable(Table *table);
 
-//Table *unlockTable(Table *table);
+Table *unlockTable(Table *table);
 
-//bool isLock(Table *table);
+bool isLock(Table *table);

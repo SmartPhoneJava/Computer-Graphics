@@ -71,11 +71,9 @@ int drawTableInside(HDC hdc, Table *table,
 
 	Cut *cut;
 
-	Table *ret = build9(table, secatel, r);
-
-	drawTable(hdc, ret, RGB(0, 255, 0));
-	
 	drawTable(hdc, secatel, RGB(255, 0, 0));
+
+	Table *ret = build9(hdc, table, secatel, r);
 	return NOERROR;
 }
 

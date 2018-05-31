@@ -3,6 +3,7 @@
 #include "Cut.h"
 #include "Table.h"
 #include "Debug.h"
+#include "Graphics.h"
 #include <iostream>
 
 #define SECATEL_NO -2
@@ -15,6 +16,6 @@
 
 int IsConvexFigure(Table *figure);
 
-Cut *build(Cut* cut, Table *secatel, int r);
+//Cut *build(Cut* cut, Table *secatel, int r);
 
-Table *build9(Table* cuts, Table *secatel, int r);
+Table *build9(HDC hdc, Table* cuts, Table *secatel, int r);

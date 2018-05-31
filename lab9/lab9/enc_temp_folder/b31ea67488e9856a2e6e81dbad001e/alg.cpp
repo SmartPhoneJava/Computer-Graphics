@@ -164,14 +164,29 @@ Point *isIn(Cut* cut, Cut* sec, int r)
 
 	Point *p1, *p2, *q1, *q2;
 
+	//debugPoint(cut->getBegin(), "vis_of_begin", vis1);
+	//debugPoint(cut->getEnd(), "vis_of_end", vis2);
+
 	if ((vis1 && (!vis2)) || (vis2 && (!vis1)))
 	{
+		debug("here", 0);
 		p2 = cut->getBegin();
 		p1 = cut->getEnd();
 
 		q1 = sec->getBegin();
 		q2 = sec->getEnd();
-	
+		/*
+		int a1, a2, b1, b2, c1, c2;
+
+		a1 = cut->width();
+		a2 = cut->height();
+
+		b1 = sec->getBX() + sec->getEX();
+		b2 = sec->getBY() + sec->getEY();
+
+		c1 = sec->getBX() - cut->getBX();
+		c2 = sec->getBY() - cut->getBY();
+		*/
 		int delta = (p2->x - p1->x) * (q1->y - q2->y) -
 			(q1->x - q2->x) * (p2->y - p1->y);
 
@@ -182,6 +197,11 @@ Point *isIn(Cut* cut, Cut* sec, int r)
 			return p2;
 
 		double t = (double)delta_t / (double)delta;
+		
+		/*
+		double t = (double)(c1 * b2 - b1 * c2) /
+			(double)(a1 * b1 - a2 * b2);
+			*/
 
 		Point *ret = newPoint(NO_POINT, NO_POINT);
 
@@ -193,12 +213,19 @@ Point *isIn(Cut* cut, Cut* sec, int r)
 		return newPoint(NO_POINT, NO_POINT);
 }
 
+//Ï
 Table *build9(HDC hdc, Table* cuts, Table *secatel, int r)
 {
 	Table* move_cut = cuts;
 	Table* move_sec = secatel;
 	Table* ret = NULL;
 	Point *s = NULL, *f = NULL;
+
+	Cut *d = NULL, *n = NULL, *w = NULL;
+
+	int dsk, wsk;
+
+	int x1, y1, x2, y2;
 
 	Point* t;
 
@@ -209,6 +236,8 @@ Table *build9(HDC hdc, Table* cuts, Table *secatel, int r)
 	{
 		ret = NULL;
 		cuts_size = getTableSize(move_cut);
+		//move_cut = cuts;
+		//debugTable(move_cut, "move_cut", getTableSize(move_cut));
 		for (int j = 0; j < cuts_size; j++)
 		{
 			if (j == 0)
@@ -258,5 +287,49 @@ Table *build9(HDC hdc, Table* cuts, Table *secatel, int r)
 			move_cut = move_cut->next;
 		}
 	}
+
+	/*
+	while (move_sec)
+	{
+		move_cut = cuts;
+		while (move_cut)
+		{
+			if (move_sec == secatel)
+			{
+				f = move_cut->cut->getBegin();
+			}
+			else
+			{
+				t = isIn(new Cut(s, move_cut->cut->getBegin()),
+					move_sec->cut, r);
+				
+				if (!isPointFree(t))
+				{	
+					debug("add", 0);
+					ret = addToTablePoint(ret, t);
+				}
+			}
+			s = move_cut->cut->getBegin();
+
+			if (is_visible(s, move_sec->cut, r))
+			{
+				debug("add", 1);
+				ret = addToTablePoint(ret, s);
+			}
+
+			move_cut = move_cut->next;
+		}
+		if (getTableSize(ret) != 0)
+		{
+			t = isIn(new Cut(s, f), move_sec->cut, r);
+			if (!isPointFree(t))
+			{
+				debug("add", 1);
+				ret = addToTablePoint(ret, t);
+			}
+		}
+		move_sec = move_sec->next;
+	}
+	*/
 	return ret;
 }
