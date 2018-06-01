@@ -16,11 +16,10 @@ int sign(Point *a, Point *b, Point *c)
 	Cut *cut2 = new Cut(b, c);
 	int number = signOfNumber(
 		cut1->vectorMultiplication(cut2));
-	debug("number", number);
+	
+	delete cut1;
+	delete cut2;
 	return number;
-	//delete cut1;
-	//delete cut2;
-	//return number;
 }
 
 // Выпуклая ли фигура
@@ -56,11 +55,10 @@ int IsConvexFigure(Table *figure)
 	while (move->next->next && equal)
 	{
 		i++;
-		debug("one", i);
 		curr = sign(
-			figure->point,
-			figure->next->point,
-			figure->next->next->point);
+			move->point,
+			move->next->point,
+			move->next->next->point);
 		if (curr * prev == -1)
 			equal = false;
 		prev = curr;
@@ -145,7 +143,6 @@ Table *build9(HDC hdc, Table* cuts, Table *secatel, int r)
 						move_sec->next->point), r);
 				if (!isPointFree(t))
 				{
-					debugPoint(t, "t1", 0);
 					ret = addToTable(ret, t);
 				}
 			}
@@ -164,7 +161,6 @@ Table *build9(HDC hdc, Table* cuts, Table *secatel, int r)
 					move_sec->next->point), r);
 			if (!isPointFree(t))
 			{
-				debugPoint(t, "t2", 0);
 				ret = addToTable(ret, t);
 			}
 		}
@@ -174,6 +170,7 @@ Table *build9(HDC hdc, Table* cuts, Table *secatel, int r)
 
 	if (getTableSize(move_cut) != 0)
 	{
+		move_cut = lockTable(move_cut);
 		while (move_cut->next)
 		{
 			drawCut(hdc, *(new Cut(move_cut->point,

@@ -244,7 +244,7 @@ void creating(HWND hWnd)
 	TCHAR text_add[BUFFER_MAX_SIZE] = "Добавить";
 	TCHAR text_delete[BUFFER_MAX_SIZE] = "Удалить";
 	TCHAR text_clear[BUFFER_MAX_SIZE] = "Очистить";
-	TCHAR text_build[BUFFER_MAX_SIZE] = "Построить";
+	TCHAR text_build[BUFFER_MAX_SIZE] = "Отсечь";
 	TCHAR text_change[BUFFER_MAX_SIZE] = "Изменить";
 	TCHAR text_0[BUFFER_MAX_SIZE] = "0";
 	TCHAR text_x1[BUFFER_MAX_SIZE] = "X1";
@@ -261,20 +261,24 @@ void creating(HWND hWnd)
 	RECT rc;
 	GetClientRect(hWnd, &rc);
 
-	DWORD usual = WS_CHILD | WS_BORDER | WS_VISIBLE | DT_CENTER;
+	DWORD usual = WS_CHILD | WS_BORDER |
+		WS_VISIBLE | DT_CENTER;
+	DWORD style_listview = WS_CHILD | LVS_REPORT |
+		LVS_EX_FULLROWSELECT | WS_VSCROLL | WS_VISIBLE;
 
-	CreateWindow(text_button, text_add, WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE, // | BS_OWNERDRAW,
-		rc.right - 300, 2, 100, 20, hWnd, (HMENU)ID_BUTTON_ADD, NULL, NULL);
-	CreateWindow(text_button, text_delete, WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE, // | BS_OWNERDRAW,
-		rc.right - 200, 2, 100, 20, hWnd, (HMENU)ID_BUTTON_DELETE, NULL, NULL);
+	CreateWindow(text_button, " ", WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE, rc.right - 300, 125,
+		800, rc.bottom - 100, hWnd, (HMENU)ID_BUTTON_PLACE, NULL, NULL);
+
+	//CreateWindow(text_button, text_add, WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE, // | BS_OWNERDRAW,
+	//	rc.right - 300, 2, 100, 20, hWnd, (HMENU)ID_BUTTON_ADD, NULL, NULL);
+	//CreateWindow(text_button, text_delete, WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE, // | BS_OWNERDRAW,
+	//	rc.right - 200, 2, 100, 20, hWnd, (HMENU)ID_BUTTON_DELETE, NULL, NULL);
 	CreateWindow(text_button, text_build, WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE, // | BS_OWNERDRAW,
 		rc.right - 200, 2, 100, 20, hWnd, (HMENU)ID_BUTTON_BUILD, NULL, NULL);
 	CreateWindow(text_button, text_clear, WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE, // | BS_OWNERDRAW,
 		rc.right - 200, 2, 100, 20, hWnd, (HMENU)ID_BUTTON_CLEAR, NULL, NULL);
-	CreateWindow(text_button, text_clear, WS_CHILD | BS_PUSHBUTTON,
-		rc.right - 200, 22, 100, 20, hWnd, (HMENU)ID_BUTTON_CLEAR, NULL, NULL);
-	CreateWindow(text_button, text_change, WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE,
-		rc.right - 100, 2, 98, 20, hWnd, (HMENU)ID_BUTTON_CHANGE, NULL, NULL);
+	//CreateWindow(text_button, text_clear, WS_CHILD | BS_PUSHBUTTON,
+	//	rc.right - 100, 2, 98, 20, hWnd, (HMENU)ID_BUTTON_CHANGE, NULL, NULL);
 	CreateWindow(text_button, text_lock, WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE,
 		rc.right - 100, 2, 98, 20, hWnd, (HMENU)ID_BUTTON_LOCK, NULL, NULL);
 
@@ -294,7 +298,9 @@ void creating(HWND hWnd)
 		(HMENU)ID_RBUTTON_SECATEL, NULL, NULL);
 
 	SendMessage(hwnd1, BM_SETCHECK, BST_CHECKED, 0);
+	EnableWindow(GetDlgItem(hWnd, ID_BUTTON_PLACE), FALSE);
 
+	/*
 	CreateWindow(text_edit, text_0, usual, rc.right - 265,
 		50, 100, 20, hWnd, (HMENU)ID_EDIT_X1, NULL, NULL);
 	CreateWindow(text_edit, text_x1, usual, rc.right - 300,
@@ -312,16 +318,16 @@ void creating(HWND hWnd)
 		rc.right - 115, 75, 100, 20, hWnd, (HMENU)ID_EDIT_Y2, NULL, NULL);
 	CreateWindow(text_edit, text_y2, usual,
 		rc.right - 150, 75, 30, 20, hWnd, (HMENU)ID_NEDIT_Y2, NULL, NULL);
-
-	DWORD style_listview = WS_CHILD | LVS_REPORT | LVS_EX_FULLROWSELECT | WS_VSCROLL | WS_VISIBLE;
-
+		
 	CreateWindow(WC_LISTVIEW, text_0, style_listview, rc.right - 300, 125,
 		300, rc.bottom - 100, hWnd, (HMENU)ID_LISTVIEW, NULL, NULL);
+		*/
 
-	EnableWindow(GetDlgItem(hWnd, ID_BUTTON_DELETE), FALSE);
-	EnableWindow(GetDlgItem(hWnd, ID_BUTTON_CHANGE), FALSE);
-	ListView_SetExtendedListViewStyle(GetDlgItem(hWnd, ID_LISTVIEW), LVS_EX_FULLROWSELECT);
+	//EnableWindow(GetDlgItem(hWnd, ID_BUTTON_DELETE), FALSE);
+	//EnableWindow(GetDlgItem(hWnd, ID_BUTTON_CHANGE), FALSE);
+	//ListView_SetExtendedListViewStyle(GetDlgItem(hWnd, ID_LISTVIEW), LVS_EX_FULLROWSELECT);
 
+	/*
 	LV_COLUMN lc; lc.mask = LVCF_TEXT | LVCF_SUBITEM | LVCF_WIDTH;
 	lc.fmt = LVCFMT_CENTER;
 	lc.pszText = text_x1; lc.iSubItem = 0; lc.cx = 60;
@@ -337,6 +343,7 @@ void creating(HWND hWnd)
 	SendDlgItemMessage(hWnd, ID_NEDIT_Y1, EM_SETREADONLY, 1, 0);
 	SendDlgItemMessage(hWnd, ID_NEDIT_X2, EM_SETREADONLY, 1, 0);
 	SendDlgItemMessage(hWnd, ID_NEDIT_Y2, EM_SETREADONLY, 1, 0);
+	*/
 }
 
 // Перерисовка экрана
@@ -350,15 +357,18 @@ void moving(HWND hWnd, int with_clean)
 		cleanRectOld(hWnd, 0, 0, 300, 0);
 	}
 
-	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_ADD), rc.right - 300, 2, 100, 20, 0);
-	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_DELETE), rc.right - 200, 2, 100, 20, 0);
+	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_PLACE), rc.right - 300, 0, 300, 800, 0);
 
-	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_BUILD), rc.right - 300, 22, 100, 20, 0);
-	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_CLEAR), rc.right - 200, 22, 100, 20, 0);
+	//MoveWindow(GetDlgItem(hWnd, ID_BUTTON_ADD), rc.right - 300, 2, 100, 20, 0);
+	//MoveWindow(GetDlgItem(hWnd, ID_BUTTON_DELETE), rc.right - 200, 2, 100, 20, 0);
 
-	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_CHANGE), rc.right - 100, 2, 98, 20, 0);
-	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_LOCK), rc.right - 100, 22, 98, 20, 0);
+	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_BUILD), rc.right - 298, 2, 98, 20, 0);
+	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_CLEAR), rc.right - 198, 2, 98, 20, 0);
 
+	//MoveWindow(GetDlgItem(hWnd, ID_BUTTON_CHANGE), rc.right - 100, 2, 98, 20, 0);
+	MoveWindow(GetDlgItem(hWnd, ID_BUTTON_LOCK), rc.right - 98, 2, 96, 20, 0);
+
+	/*
 	MoveWindow(GetDlgItem(hWnd, ID_NEDIT_X1), rc.right - 300, 50, 25, 20, 0);
 	MoveWindow(GetDlgItem(hWnd, ID_EDIT_X1), rc.right - 270, 50, 110, 20, 0);
 
@@ -370,11 +380,11 @@ void moving(HWND hWnd, int with_clean)
 
 	MoveWindow(GetDlgItem(hWnd, ID_EDIT_Y2), rc.right - 110, 75, 110, 20, 0);
 	MoveWindow(GetDlgItem(hWnd, ID_NEDIT_Y2), rc.right - 140, 75, 25, 20, 0);
+	*/
+	MoveWindow(GetDlgItem(hWnd, ID_RGROUP), rc.right - 298, 23, 296, 80, 0);
+	MoveWindow(GetDlgItem(hWnd, ID_RBUTTON_CUTS), rc.right - 290, 45, 140, 20, 0);
+	MoveWindow(GetDlgItem(hWnd, ID_RBUTTON_SECATEL), rc.right - 150, 45, 140, 20, 0);
+	MoveWindow(GetDlgItem(hWnd, ID_RBUTTON_VERTICAL), rc.right - 290, 67, 280, 20, 0);
 
-	MoveWindow(GetDlgItem(hWnd, ID_RGROUP), rc.right - 300, 100, 300, 80, 0);
-	MoveWindow(GetDlgItem(hWnd, ID_RBUTTON_CUTS), rc.right - 290, 125, 140, 20, 0);
-	MoveWindow(GetDlgItem(hWnd, ID_RBUTTON_SECATEL), rc.right - 150, 125, 140, 20, 0);
-	MoveWindow(GetDlgItem(hWnd, ID_RBUTTON_VERTICAL), rc.right - 290, 150, 280, 20, 0);
-
-	MoveWindow(GetDlgItem(hWnd, ID_LISTVIEW), rc.right - 300, 200, 300, rc.bottom - 100, 0);
+	//MoveWindow(GetDlgItem(hWnd, ID_LISTVIEW), rc.right - 260, 200, 260, 100, 0);
 }
