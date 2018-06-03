@@ -2,8 +2,6 @@
 #include "Point.h"
 #include <iostream>
 
-/////
-
 void Point::setX(Point *point)noexcept
 {
 	this->x = point->x;
@@ -107,10 +105,56 @@ Point::Point(Point &&point) noexcept
 	setZ(point);
 }
 
+Point& Point::operator=(const Point& other) noexcept
+{
+	x = other.x;
+	y = other.y;
+	z = other.z;
+	return *this;
+}
+
+Point& Point::operator=(Point&& other)noexcept
+{
+	x = other.x;
+	y = other.y;
+	z = other.z;
+	return *this;
+}
+
+// Преобразование вектора в точку
+void vectorToPoint(Point &p, const t_vect &vec) 
+{
+	p.setX(vec[0]);
+	p.setY(vec[1]);
+	p.setZ(vec[2]);
+}
+
+// Преобразование точки в вектор
+void pointToVector(t_vect &vec, const Point &p) 
+{
+	vec[0] = p.getX();
+	vec[1] = p.getY();
+	vec[2] = p.getZ();
+	vec[3] = 1;
+}
+
+/*
+Применение действия(поворота или масштабирования) за
+счёт умножения точки(превращенной в вектор) на матрицу
+поворота или масштабирования.
+*/
+void Point::update(const t_matrix &matrix)
+{
+	t_vect vec;
+	pointToVector(vec, *this);
+	multVector(vec, matrix);
+	vectorToPoint(*this, vec);
+}
+
 void Point::debug(
 	const char* text, int number) noexcept
 {
-	debug(text, number);
+	//debug(text, number);
 	debugDouble("x", x);
 	debugDouble("y", y);
 	debugDouble("z", z);

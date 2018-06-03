@@ -32,6 +32,7 @@ void setMouseCoordinates(HWND hWnd, int x,
 
 void deleteListViewItem(HWND listview, int i);
 
+/*
 Table* adding(HWND hWnd, Table *table);
 
 void updatingListView(HWND hWnd, LPARAM lParam,
@@ -44,7 +45,7 @@ void deleting(HWND hWnd, int listview_choosen,
 void changing(HWND hWnd, int listview_choosen,
 	Table* table, int old_x1, int old_y1,
 	int old_x2, int old_y2);
-
+	*/
 void creating(HWND hWnd);
 
 void moving(HWND hWnd, int with_clean);

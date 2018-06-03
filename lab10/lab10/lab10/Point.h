@@ -1,7 +1,8 @@
 #pragma once
 #include "Debug.h"
 #include "Resource.h"
-
+#include "Matrix.h"
+#include "Vector.h"
 
 class Point
 {
@@ -12,9 +13,9 @@ public:
 	/*Конструкторы */
 	Point();
 	Point(Point *p);
+	Point(const Point &point);
 	Point(double x, double y, double z);
 	Point(Point &a, Point &center);
-	Point(const Point &cut);
 
 	void setX(Point *point) noexcept;
 	void setX(const Point *point) noexcept;
@@ -44,4 +45,10 @@ public:
 		const Point &B)const noexcept;
 
 	bool isFree()const noexcept;
+
+	Point& operator=(const Point& other) noexcept;
+
+	Point& operator=(Point&& other)noexcept;
+
+	void update(const t_matrix &matrix);
 };

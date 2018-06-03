@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Point.h"
+#include "Matrix.h"
+#include "Vector.h"
 #include "Debug.h"
 
 class Cut
@@ -81,5 +83,7 @@ public:
 	int scalarMultyplication(const Cut &cut) const noexcept;
 
 	bool isEqual(const Cut &B)noexcept;
+
+	void update(const t_matrix &matrix);
 };
 

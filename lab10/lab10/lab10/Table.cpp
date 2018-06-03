@@ -59,7 +59,7 @@ Table* addToTable(Table* table, Cut *cut)
 
 bool isCutInTable(Table *A, const Cut &cut)
 {
-	return (A->cut)->compareWithCut(cut);
+	return (A->cut)->isEqual(cut);
 }
 
 Table* deleteOfTable(Table* table, Cut *cut)
@@ -119,7 +119,8 @@ void debugTable(Table* table, const char* text, int number)
 	while (mov != NULL)
 	{
 		count++;
-		(mov->cut)->debugCut("cut(Table) ", count);
+		if (mov->cut)
+			(mov->cut)->debug("cut(Table) ", count);
 		mov = mov->next;
 	}
 }

@@ -225,11 +225,17 @@ double Cut::dz() const noexcept
 	return end->getZ() - begin->getZ();
 }
 
+// Обновление позиции с помощью матрицы
+void Cut::update(const t_matrix &matrix)
+{
+	begin->update(matrix);
+	end->update(matrix);
+}
 
 void Cut::debug(
 	const char* text, int number) noexcept
 {
-	debug(text, number);
+	//debug(text, number);
 	begin->debug("Cut Point ", 1);
 	end->debug("Cut Point ", 2);
 }

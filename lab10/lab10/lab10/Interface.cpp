@@ -97,7 +97,7 @@ int getIntText(HWND hWnd, int ID)
 	GetWindowText(GetDlgItem(hWnd, ID), buffer, sizeof(buffer));
 	return atoi(buffer);
 }
-
+/*
 // Получение координат
 void getCoordinates(HWND hWnd, int &x1, int &y1, int &x2, int &y2)
 {
@@ -235,6 +235,7 @@ void changing(HWND hWnd, int listview_choosen,
 	EnableWindow(GetDlgItem(hWnd, ID_BUTTON_DELETE), FALSE);
 	EnableWindow(GetDlgItem(hWnd, ID_BUTTON_CHANGE), FALSE);
 }
+*/
 
 void creating(HWND hWnd)
 {

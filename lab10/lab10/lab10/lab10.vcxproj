@@ -30,7 +30,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -148,30 +148,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="algo.h" />
-    <ClInclude Include="base_algo.h" />
     <ClInclude Include="Cut.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="f.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="lab10.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="Point.h" />
-    <ClInclude Include="point_transf.h" />
+    <ClInclude Include="Transformation.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Table.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="algo.cpp" />
-    <ClCompile Include="base_algo.cpp" />
     <ClCompile Include="Cut.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="lab10.cpp" />
+    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Point.cpp" />
-    <ClCompile Include="point_transf.cpp" />
+    <ClCompile Include="Transformation.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -179,6 +180,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Table.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="lab10.rc" />

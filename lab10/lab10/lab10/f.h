@@ -2,10 +2,22 @@
 #define F_H
 #define FUNC_NUMBER 4
 #include <math.h>
+
+struct tFunction
+{
+	double(*f)(double, double);
+	double xmin;
+	double xmax;
+	double dx;
+	int n;
+	double zmin;
+	double zmax;
+};
+
 typedef double (*Pointfunc)(double, double);
 
-class CFunction {
-
+class CFunction 
+{
 public:
     CFunction()
     {

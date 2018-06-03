@@ -51,10 +51,8 @@ int IsConvexFigure(Table *figure)
 	Пока есть ребра и знаки их векторных
 	произведений совпадают
 	*/
-	int i = 0;
 	while (move->next->next && equal)
 	{
-		i++;
 		curr = sign(
 			move->point,
 			move->next->point,

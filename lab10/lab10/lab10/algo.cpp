@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "algo.h"
 
 void FindYBroders(Table *table, double &ymax, double &ymin)
@@ -80,12 +81,14 @@ void GorisontAlgo(tFunction &func, Table** table)
         highHorisont.push_back(Point(i, maxHor, 0));
         lowHorisont.push_back (Point(i, minHor, 0));
     }
-    Point *P, *Q;
+    Point *P = NULL, *Q = NULL;
     bool flag = false;
     double zstep = (func.zmax - func.zmin) / (func.n - 1);
     zstep = Round(zstep);
     int pointCount = lowHorisont.size();
-    for(double i = func.zmin; i <= func.zmax + EPS; i += zstep) 
+	debug("lowHorisont.size()", lowHorisont.size());
+
+	for(double i = func.zmin; i <= func.zmax + EPS; i += zstep) 
 	{
         if(i > func.zmax)
             i = func.zmax;
@@ -110,6 +113,7 @@ void GorisontAlgo(tFunction &func, Table** table)
 			func.f(lowHorisont[0].getX(), i), i);
 
 		Point *second, *I;
+		// flag1 - 
         int flag1, flag2;
         flag1 = VisiblePoint(lowHorisont[0], highHorisont[0], *first);
         for(int j = 1; j < pointCount; j++) 
@@ -185,6 +189,9 @@ int SimpleAlgo(HWND hWnd, tFunction func, Table** table)
     double ymax, ymin;
     FindYBroders(*table, ymax, ymin);
 
+	debugDouble("ymax", ymax);
+	debugDouble("ymin", ymin);
+
     Point center((func.xmax - func.xmin)/2 + func.xmin, (ymax - ymin)/2 + ymin,0);
     MovingGraphic(*table, -center.getX(), -center.getY());
 
@@ -192,13 +199,15 @@ int SimpleAlgo(HWND hWnd, tFunction func, Table** table)
 	GetClientRect(hWnd, &rect);
 
 	
-    double ky = (ymax - ymin)           / (rect.bottom - BORDER * 2);
-    double kx = (func.xmax - func.xmin) / (rect.right - BORDER * 2);
-    double k = 1 / max(kx, ky);
+    double ky = (ymax - ymin)           / (rect.bottom);
+    double kx = (func.xmax - func.xmin) / (rect.right);
+    double k = 1 / max(kx, ky) * 100;
     Scale scale {k, k, k};
     ScaleModel(*table, scale);
 
 	HDC hdc= GetDC(hWnd);
+	debug("i am here", 0);
+	debugTable(*table, "ddddddd", 0);
 	drawTable(hdc, *table, RGB(0, 255, 0));
 	ReleaseDC(hWnd, hdc);
 
