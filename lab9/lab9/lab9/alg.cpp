@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Alg.h"
-
+//edrtfgyuhijokpl;
 int signOfNumber(const int &a)
 {
 	if (a < 0)

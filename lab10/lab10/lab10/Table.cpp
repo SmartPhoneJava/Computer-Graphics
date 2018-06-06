@@ -119,8 +119,7 @@ void debugTable(Table* table, const char* text, int number)
 	while (mov != NULL)
 	{
 		count++;
-		if (mov->cut)
-			(mov->cut)->debug("cut(Table) ", count);
+		(mov->cut)->debug("cut(Table) ", count);
 		mov = mov->next;
 	}
 }

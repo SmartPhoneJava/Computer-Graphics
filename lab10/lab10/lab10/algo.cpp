@@ -3,13 +3,16 @@
 
 void FindYBroders(Table *table, double &ymax, double &ymin)
 {
-    ymax = ymin = table->cut->getBegin()->getY();
+	ymax = ymin = table->cut->getBegin()->getY();
 	Table* move = table;
 	double y_end, y_begin;
+	int i = 0;
 	while (move)
 	{
 		y_begin = move->cut->getBegin()->getY();
 		y_end = move->cut->getEnd()->getY();
+		debug("y_begin", y_begin);
+		debug("y_end", y_end);
 
 		if (y_begin > ymax)
 			ymax = y_begin;
@@ -47,7 +50,9 @@ int VisiblePoint(Point &low, Point &high, Point &tmp)
     return 0;
 }
 
-Point* IntersectionSegments(Point &p1, Point &p2, Point &p3, Point &p4)
+
+Point* IntersectionSegments(Point &p1, Point &p2,
+	Point &p3, Point &p4, double z)
 {
     double k1 = (p2.getY() - p1.getY()) /
 		(p2.getX() - p1.getX());
@@ -60,8 +65,7 @@ Point* IntersectionSegments(Point &p1, Point &p2, Point &p3, Point &p4)
     
 	double x = (b2 - b1) / (k1 - k2);
 	double y = k1 * x + b1;
-    //res.z = p1.z;
-    return new Point(x, y, 0);
+    return new Point(x, y, z);
 }
 double Round(double x) //magic
 {
@@ -70,6 +74,202 @@ double Round(double x) //magic
     x /= 100000;
     return x;
 }
+
+void cutApply(HDC hdc, Table **table, Point* p1, Point* p2)
+{
+	p1->addX(100);
+	p2->addX(100);
+
+	Scale scale{ 2, 2, 1};
+	t_matrix a;
+	scalingMatrix(a, scale);
+
+	p1->swap();
+	p2->swap();
+
+	//p1->update(a);
+
+	//MovingGraphic(*table, 500, 200);
+	Cut* cut = new Cut(p1, p2);
+
+	*table = addToTable(*table, cut);
+	drawCut(hdc, *cut, RGB(255, 0, 0));
+}
+
+void GorisontAlgo_new(HDC hdc, tFunction &func,
+	Table** table)
+{
+	vector<Point> high;
+	vector<Point> low;
+
+	/*
+	Инициализация первого плавающего горизонта
+	(нижнего и верхнего)
+	*/
+	double X, Y, Z = func.zmin;
+	double xMax = func.xmax, xMin = func.xmin, dx = func.dx;
+
+	debugDouble("func.f(x, Z)", func.f(5, 100));
+	for (double x = xMin; x < xMax; x += dx)
+	{
+		Y = func.f(x, Z);
+		high.push_back(Point(x, Y, Z));
+		low.push_back(Point(x, Y, Z));
+	}
+
+	/*
+	Обновление горизонтов
+	*/
+
+	double dz = (double)(func.zmax - func.zmin) /
+		(func.n - 1);
+	double zMin = func.zmin;
+	double zMax = func.zmax + EPS;
+
+	double mMin = low[0].getY();
+	double mMax = low[0].getY();
+
+	// I - точка пересения
+	Point *pointPrev, *pointCurr, *I;
+
+	int visPrev, visCurr;
+
+	int pointCount = low.size();
+
+	Point *firstPrev = NULL, *firstCurr = NULL;
+	Point *lastPrev = NULL, *lastCurr = NULL;
+
+	bool FIRST_TIME = true;
+
+	double xLast, xFirst;
+
+	Cut *cut;
+
+	// Идём в глубину
+	for (double z = zMin; z <= zMax; z += dz)
+	{
+		if (z > zMax)
+			z = zMax;
+
+		{
+			xFirst = low[0].getX();
+			firstCurr = new Point(xFirst,
+				func.f(xFirst, z), z);
+			if (!FIRST_TIME)
+			{
+				//cut = new Cut(firstPrev, firstCurr);
+				//*table = addToTable(*table, cut);
+				//drawCut(hdc, *cut, RGB(255, 0, 0));
+				cutApply(hdc, table, firstPrev, firstCurr);
+			}
+			firstPrev = firstCurr;
+		}
+
+
+		lastCurr = new Point(
+			low[pointCount - 1].getX(),
+			func.f(low[pointCount - 1].getX(), z), z);
+
+		if (!FIRST_TIME)
+		{
+			//*table = addToTable(*table, new Cut(lastPrev, lastCurr));
+			cutApply(hdc, table, lastPrev, lastCurr);
+		}
+
+		lastPrev = lastCurr;
+
+		FIRST_TIME = false;
+
+		/* 
+		Первая точка, нужна, чтобы дальнейшая
+		точка имела значение видимости предыдущей
+		*/
+		pointPrev = new Point(xMin, func.f(xMin, z), z);
+		visPrev = pointPrev->isVisible(low[0], high[0]);
+		for (int j = 1; j < pointCount; j++)
+		{
+			X = low[j].getX();
+			pointCurr = new Point(X, func.f(X, z), z);
+			
+			visCurr = pointCurr->isVisible(low[j], high[j]);
+			if (visCurr == visPrev) 
+			{ // Если оба видимы или не видимы
+				if (visCurr) // то в случае видимости отрисуем
+				{
+					//*table = addToTable(*table, new Cut(pointPrev, pointCurr));
+					cutApply(hdc, table, pointPrev, pointCurr);
+				}
+			}
+			else if (visCurr && visPrev)
+			{ // Если одна точка видима, а вторая нет
+				I = IntersectionSegments(*pointPrev,
+					*pointCurr, low[j - 1], low[j], z);
+
+				if (visCurr < 0)
+				{
+					//*table = addToTable(*table, new Cut(I, pointCurr));
+					cutApply(hdc, table, I, pointCurr);
+				}
+				else
+				{
+					//*table = addToTable(*table, new Cut(I, pointPrev));
+					cutApply(hdc, table, I, pointPrev);
+				}
+
+				I = IntersectionSegments(*pointPrev,
+					*pointCurr, high[j - 1], high[j], z);
+
+				if (visCurr > 0)
+				{
+					//*table = addToTable(*table, new Cut(I, pointCurr));
+					cutApply(hdc, table, I, pointCurr);
+				}
+				else
+				{
+					//*table = addToTable(*table, new Cut(I, pointPrev));
+					cutApply(hdc, table, I, pointPrev);
+				}
+			}
+			else
+			{
+				if (visCurr + visPrev > 0)
+					I = IntersectionSegments(*pointPrev, *pointCurr,
+						high[j - 1], high[j], z);
+				else
+					I = IntersectionSegments(*pointPrev, *pointCurr,
+						low[j - 1], low[j], z);
+				if (visCurr)
+				{
+					//*table = addToTable(*table, new Cut(I, pointCurr));
+					cutApply(hdc, table, I, pointCurr);
+				}
+				else
+				{
+					//*table = addToTable(*table, new Cut(I, pointPrev));
+					cutApply(hdc, table, I, pointPrev);
+				}
+			}
+			pointPrev = pointCurr;
+			visPrev = visCurr;
+		}
+		// Корректировка горизонтов
+		//корректировка массивов горизонтов
+		debug("mMin", mMin);
+		for (int j = 0; j < pointCount; j++)
+		{
+			X = low[j].getX();
+			mMin = min(low[j].getY(), func.f(X, z));
+
+			X = high[j].getX();
+			mMax = max(high[j].getY(), func.f(X, z));
+			low[j].setY(mMin);
+			debug("low[j].getY()", low[j].getY());
+			high[j].setY(mMax);
+		}
+		debug("mMin", mMin);
+	}
+}
+
 
 void GorisontAlgo(tFunction &func, Table** table)
 {
@@ -124,42 +324,63 @@ void GorisontAlgo(tFunction &func, Table** table)
             flag2 = VisiblePoint(lowHorisont[j], highHorisont[j], *second);
             if(flag1 == flag2) 
 			{
-                if(flag2)
-					*table = addToTable(*table, new Cut(first, second));
+				if (flag2)
+				{
+					*table = addToTable(*table,
+						new Cut(first, second));
+				}
             }
-            else if(flag2 && flag1) 
+			else if (flag2 && flag1)
 			{
-                I = IntersectionSegments(*first,
-					*second, lowHorisont[j-1], lowHorisont[j]);
-                I->setZ(i);
-
-                if(flag2 < 0)
-					*table = addToTable(*table, new Cut(I, second));
-                else
-					*table = addToTable(*table, new Cut(I, first));
-
-                I = IntersectionSegments(*first,
-					*second, highHorisont[j-1], highHorisont[j]);
+				I = IntersectionSegments(*first,
+					*second, lowHorisont[j - 1],
+					lowHorisont[j], i);
 				I->setZ(i);
 
-                if(flag2 > 0)
-					*table = addToTable(*table, new Cut(I, second));
-                else
-					*table = addToTable(*table, new Cut(I, first));
+				if (flag2 < 0)
+				{
+					*table = addToTable(*table,
+						new Cut(I, second));
+				}
+				else
+				{
+					*table = addToTable(*table,
+						new Cut(I, first));
+				}
+
+                I = IntersectionSegments(*first,
+					*second, highHorisont[j-1],
+					highHorisont[j], i);
+				I->setZ(i);
+
+				if (flag2 > 0)
+				{
+					*table = addToTable(*table,
+						new Cut(I, second));
+				}
+				else
+				{
+					*table = addToTable(*table,
+						new Cut(I, first));
+				}
             }
             else 
 			{
                 if(flag2 + flag1 > 0)
                     I = IntersectionSegments(*first, *second,
-						highHorisont[j-1], highHorisont[j]);
+						highHorisont[j-1], highHorisont[j], i);
                 else
                     I = IntersectionSegments(*first, *second,
-						lowHorisont[j-1], lowHorisont[j]);
+						lowHorisont[j-1], lowHorisont[j], i);
 				I->setZ(i);
-                if(flag2)
+				if (flag2)
+				{
 					*table = addToTable(*table, new Cut(I, second));
-                else
+				}
+				else
+				{
 					*table = addToTable(*table, new Cut(I, first));
+				}
             }
             first = second;
             flag1 = flag2;
@@ -176,14 +397,15 @@ void GorisontAlgo(tFunction &func, Table** table)
 			highHorisont[j].setY(maxM);
         }
     }
-
 }
+
 
 int SimpleAlgo(HWND hWnd, tFunction func, Table** table)
 {
+	HDC hdc = GetDC(hWnd);
 	cleanRectOld(hWnd, 0, 0, 300, 0);
     //построение с помощью алгоритма плавающего горизонта
-    GorisontAlgo(func, table);
+    GorisontAlgo_new(hdc, func, table);
 
     //корректировка координат с учетом размеров сцены
     double ymax, ymin;
@@ -193,22 +415,24 @@ int SimpleAlgo(HWND hWnd, tFunction func, Table** table)
 	debugDouble("ymin", ymin);
 
     Point center((func.xmax - func.xmin)/2 + func.xmin, (ymax - ymin)/2 + ymin,0);
-    MovingGraphic(*table, -center.getX(), -center.getY());
+    MovingGraphic(*table, 500, 200);
 
 	RECT rect;
 	GetClientRect(hWnd, &rect);
 
+	Scale scale{ 1, 1, 1 };
+
+	/*
 	
     double ky = (ymax - ymin)           / (rect.bottom);
     double kx = (func.xmax - func.xmin) / (rect.right);
     double k = 1 / max(kx, ky) * 100;
-    Scale scale {k, k, k};
+    Scale scale {1/kx, 1/ky, k};
     ScaleModel(*table, scale);
-
-	HDC hdc= GetDC(hWnd);
+	*/
 	debug("i am here", 0);
-	debugTable(*table, "ddddddd", 0);
-	drawTable(hdc, *table, RGB(0, 255, 0));
+	//debugTable(*table, "ddddddd", 0);
+	//drawTable(hdc, *table, RGB(0, 255, 0));
 	ReleaseDC(hWnd, hdc);
 
     return 0;

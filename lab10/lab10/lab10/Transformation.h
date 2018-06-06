@@ -20,3 +20,5 @@ struct Scale {
 
 void RotateModel(Table *table, const Rotate &act);
 void ScaleModel (Table *table, const Scale &act);
+void scalingMatrix(t_matrix a, const Scale &act);
+

@@ -150,7 +150,7 @@
     <ClInclude Include="algo.h" />
     <ClInclude Include="Cut.h" />
     <ClInclude Include="Debug.h" />
-    <ClInclude Include="f.h" />
+    <ClInclude Include="Function.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="lab10.h" />

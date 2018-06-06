@@ -22,14 +22,11 @@ public:
     CFunction()
     {
         f[0] = &f1;
-        f[1] = &f2;
-        f[2] = &f3;
-        f[3] = &f4;
     }
 
     Pointfunc GetFunc(int index)
     {
-        return f[index];
+        return f[0];
     }
 
     const char* GetStr(int index)
@@ -52,19 +49,24 @@ private:
 
     static double f1(double x, double z)
     {
-        return sin(x) * cos(z);
+		return x * x + z * z;
+        //return sin(x) * cos(z);
     }
+	/*
     static double f2(double x, double z)
     {
-        return x*x - z*z;
+        return x;
     }
     static double f3(double x, double z)
     {
-        return sin(x)*x*cos(z);
+		return x;
+        //return sin(x)*x*cos(z);
     }
     static double f4(double x, double z)
     {
-        return x*z;
+		return x;
+        //return x*z;
     }
+	*/
 };
 #endif // F_H

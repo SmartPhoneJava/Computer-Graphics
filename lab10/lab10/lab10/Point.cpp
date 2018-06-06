@@ -143,12 +143,40 @@ void pointToVector(t_vect &vec, const Point &p)
 счёт умножения точки(превращенной в вектор) на матрицу
 поворота или масштабирования.
 */
-void Point::update(const t_matrix &matrix)
+void Point::update(const t_matrix &matrix) noexcept
 {
 	t_vect vec;
 	pointToVector(vec, *this);
 	multVector(vec, matrix);
 	vectorToPoint(*this, vec);
+}
+
+void Point::addX(double x)noexcept
+{
+	this->x = this->x + x;
+}
+
+void Point::addY(double y)noexcept
+{
+	this->y = this->y + y;
+}
+
+void Point::swap()noexcept
+{
+	double tmp = x;
+	x = y;
+	y = tmp;
+}
+
+// Видимость точки
+int Point::isVisible(Point &low,
+	Point &high)const noexcept
+{
+	if (y > high.y || fabs(y - high.y) > EPS)
+		return HIGH_VISIBLE;
+	if (y < low.y || fabs(y - low.y) > EPS)
+		return LOW_VISIBLE;
+	return NO_VISIBLE;
 }
 
 void Point::debug(

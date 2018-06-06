@@ -7,7 +7,7 @@
 #include <windows.h>
 #include "graphics.h"
 #include "table.h"
-#include "f.h"
+#include "Function.h"
 #include "Transformation.h"
 
 #define INF (INT_MAX-1)

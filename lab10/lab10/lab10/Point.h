@@ -2,7 +2,11 @@
 #include "Debug.h"
 #include "Resource.h"
 #include "Matrix.h"
-#include "Vector.h"
+#include "Vector.h"	
+
+#define HIGH_VISIBLE 1
+#define LOW_VISIBLE -1
+#define NO_VISIBLE 0
 
 class Point
 {
@@ -41,14 +45,22 @@ public:
 	void debug(
 		const char* text, int number)noexcept;
 
+	void swap()noexcept;
+
 	bool isEqual(
 		const Point &B)const noexcept;
 
 	bool isFree()const noexcept;
 
+	int isVisible(Point &low, Point &high)const noexcept;
+
 	Point& operator=(const Point& other) noexcept;
 
 	Point& operator=(Point&& other)noexcept;
 
-	void update(const t_matrix &matrix);
+	void addX(double x)noexcept;
+
+	void addY(double y)noexcept;
+
+	void update(const t_matrix &matrix)noexcept;
 };

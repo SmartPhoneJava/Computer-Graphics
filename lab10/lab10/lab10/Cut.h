@@ -16,6 +16,7 @@ private:
 public:
 	/*Конструкторы */
 	Cut();
+	Cut(Point &p1, Point &p2);
 	Cut(Point *p1, Point *p2);
 	Cut(double x1, double y1, double z1,
 		double x2, double y2, double z2);

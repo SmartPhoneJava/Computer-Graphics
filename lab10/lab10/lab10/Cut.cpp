@@ -97,6 +97,12 @@ void Cut::setBZ(double z) noexcept
 	begin->setZ(z);
 }
 
+Cut::Cut(Point &p1, Point &p2)
+{
+	begin = &p1;
+	end = &p2;
+}
+
 void Cut::setEX(double x) noexcept
 {
 	end->setX(x);
